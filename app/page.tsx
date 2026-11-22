@@ -144,7 +144,7 @@ export default function HomePage() {
                   />
                 </div>
                 <figcaption className="media-caption">
-                  Default output (<span className="inline-code">drone-path &quot;flight.mp4&quot;</span>): Esri World Imagery satellite map, growing flight trail, and heading arrow.
+                  Default satellite output: Esri World Imagery map, growing flight trail, and heading arrow.
                 </figcaption>
               </figure>
 
@@ -158,7 +158,7 @@ export default function HomePage() {
                   />
                 </div>
                 <figcaption className="media-caption">
-                  Topographic style (<span className="inline-code">--style topo --hud heading,alt,speed</span>): OpenTopoMap contours with live telemetry chips.
+                  Topographic style: OpenTopoMap contours with live telemetry chips.
                 </figcaption>
               </figure>
             </div>
