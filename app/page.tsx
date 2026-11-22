@@ -18,7 +18,7 @@ const softwareJsonLd = {
   url: 'https://dronepath.dev/',
   codeRepository: 'https://github.com/MrManny/drone-path',
   description:
-    'Render synchronized 2D flight-path map overlay videos from DJI drone recordings, index local footage in a spatial archive, and expose tools to AI agents over MCP.',
+    'Render synchronized 2D flight-path map overlay videos from DJI drone recordings, index local footage in a SQLite spatial archive, and expose tools to AI agents over Model Context Protocol.',
 };
 
 export default function HomePage() {
@@ -35,13 +35,13 @@ export default function HomePage() {
           <div>
             <p className="eyebrow">
               <span className="eyebrow-dot" aria-hidden="true" />
-              <span>Open source · DJI telemetry &amp; flight maps</span>
+              <span>MIT License · DJI Neo 2 &amp; DVTM / SRT telemetry · Node.js 24+</span>
             </p>
             <h1 id="hero-heading">
-              Flight-path map overlays and spatial search for DJI drone footage.
+              Render synchronized flight-path map videos from DJI drone footage.
             </h1>
             <p className="hero-lead">
-              Drone Path reads telemetry from DJI recordings and renders synchronized 2D flight-path map videos, exports clean GPS tracks, indexes local footage libraries, and exposes post-flight tools over Model Context Protocol.
+              Drone Path turns embedded DJI telemetry into 2D flight-path map overlays at the exact frame rate and frame count of your source recording. Index local footage by location and camera gaze, review flights on one timeline, or connect AI agents over Model Context Protocol.
             </p>
             <div className="cta-row">
               <a
@@ -72,31 +72,111 @@ export default function HomePage() {
             <div className="media-frame">
               <img
                 src="/images/app-main-window.jpg"
-                alt="Drone Path desktop app showing an aerial forest recording beside a synchronized 2D flight map with an orange flight trail and telemetry strip"
+                alt="Drone Path desktop app displaying a drone recording over an autumn forest beside a synchronized satellite flight map, orange flight trail, and live telemetry readout strip"
                 width={1440}
                 height={900}
               />
             </div>
             <figcaption className="media-caption">
-              Synchronized review and map rendering from DJI embedded CAM meta (DVTM) or .SRT sidecar telemetry.
+              The desktop app playing a DJI recording beside its synchronized 2D flight map, with the growing trail, heading marker, and telemetry strip sharing one timeline.
             </figcaption>
           </figure>
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="surfaces-heading">
+      <section className="section section-alt" aria-labelledby="telemetry-heading">
         <div className="container">
-          <div className="notice" role="status" style={{ marginBottom: '32px' }}>
+          <div className="section-header">
+            <p className="section-kicker">Telemetry extraction</p>
+            <h2 id="telemetry-heading">Built directly on DJI flight metadata</h2>
             <p>
-              <strong>Site preview:</strong> This initial release establishes the structure and visual system for <span className="inline-code">dronepath.dev</span>. Full guides and reference tables are being reviewed for publication—use the links below or the <a href="https://github.com/MrManny/drone-path" target="_blank" rel="noopener noreferrer">GitHub repository</a> for complete documentation today.
+              Drone Path decodes positioning, attitude, and camera metadata straight from your recordings without inventing timestamps or interpolating over telemetry dropouts.
             </p>
           </div>
 
+          <div className="card-grid-2">
+            <article className="card">
+              <h3>Embedded CAM meta (DVTM)</h3>
+              <p>
+                Reads DJI&apos;s protobuf telemetry stream directly from the MP4 container when present—extracting GPS coordinates, absolute altitude, 3-axis body and gimbal attitude, drone yaw heading, and camera exposure settings per frame.
+              </p>
+              <p className="card-meta">Primary source · No sidecar file required</p>
+            </article>
+
+            <article className="card">
+              <h3>.SRT sidecar telemetry</h3>
+              <p>
+                Automatically parses an adjacent <span className="inline-code">.SRT</span> subtitle telemetry file when no embedded CAM meta stream exists, computing heading from the GPS track and breaking lines cleanly across signal gaps.
+              </p>
+              <p className="card-meta">Automatic fallback · Gap-aware segmentation</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="outputs-heading">
+        <div className="container">
           <div className="section-header">
-            <p className="section-kicker">Architecture</p>
-            <h2 id="surfaces-heading">Three ways to work with your flight footage</h2>
+            <p className="section-kicker">Map rendering</p>
+            <h2 id="outputs-heading">Frame-accurate map overlays ready for your timeline</h2>
             <p>
-              Use the graphical desktop app for visual review, the CLI for batch pipelines and spatial indexing, or the stdio MCP server for AI-assisted culling.
+              Every exported map video matches the source recording&apos;s exact frame count and frame rate so overlays drop straight onto a second video track without drift.
+            </p>
+          </div>
+
+          <div className="card-grid-3">
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/example-source-frame.jpg"
+                  alt="Source aerial drone frame looking across an autumn forest and mountain ridge"
+                  width={1280}
+                  height={720}
+                />
+              </div>
+              <figcaption className="media-caption">
+                Source DJI recording frame used as input for the map renders beside it.
+              </figcaption>
+            </figure>
+
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/example-map-satellite.jpg"
+                  alt="Rendered 768 by 768 satellite map video frame showing the growing coral flight trail and drone heading arrow"
+                  width={768}
+                  height={768}
+                />
+              </div>
+              <figcaption className="media-caption">
+                Default output (<span className="inline-code">drone-path &quot;flight.mp4&quot;</span>): Esri World Imagery satellite map, growing flight trail, and heading arrow.
+              </figcaption>
+            </figure>
+
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/example-map-topo-hud.jpg"
+                  alt="Rendered topographic map video frame with heading, altitude, and speed HUD readout chips along the bottom"
+                  width={768}
+                  height={768}
+                />
+              </div>
+              <figcaption className="media-caption">
+                Topographic style (<span className="inline-code">--style topo --hud heading,alt,speed</span>): OpenTopoMap contours with live telemetry chips.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-alt" aria-labelledby="pillars-heading">
+        <div className="container">
+          <div className="section-header">
+            <p className="section-kicker">Three interfaces, one core</p>
+            <h2 id="pillars-heading">Review, script, or connect to AI agents</h2>
+            <p>
+              All three interfaces share the same deterministic telemetry parser, spatial math, and video rendering engine.
             </p>
           </div>
 
@@ -107,7 +187,7 @@ export default function HomePage() {
               </div>
               <h3>Desktop app</h3>
               <p>
-                Review DJI recordings beside a synchronized 2D map, toggle Picture-in-Picture, mark In–Out passages, tune map styling live, and export overlays or tracks.
+                An Electron review workspace for Windows and Linux with synchronized split or Picture-in-Picture playback, In–Out loop marking, live map appearance previews, and one-click video or track export.
               </p>
               <Link href="/desktop/" className="card-link">
                 <span>Explore desktop app</span>
@@ -121,7 +201,7 @@ export default function HomePage() {
               </div>
               <h3>CLI &amp; spatial archive</h3>
               <p>
-                Batch-render map videos, extract targeted keyframes, export GPX/GeoJSON/KML tracks, and search local footage by coordinates, camera gaze, or shot smoothness.
+                A scriptable command-line tool for batch map rendering, fast keyframe extraction, and indexing local recordings into a <span className="inline-code">node:sqlite</span> archive with camera gaze search and shot segmentation.
               </p>
               <Link href="/cli/" className="card-link">
                 <span>Explore CLI &amp; archive</span>
@@ -135,7 +215,7 @@ export default function HomePage() {
               </div>
               <h3>MCP server</h3>
               <p>
-                Run a root-confined stdio JSON-RPC 2.0 server so AI agents can query flights, inspect telemetry snapshots, extract frames, and export NLE markers locally.
+                A root-confined stdio JSON-RPC 2.0 server giving Claude Desktop, Cursor, and other MCP clients 9 structured tools to search flights, inspect frames, export NLE markers, and render overlays locally.
               </p>
               <Link href="/mcp/" className="card-link">
                 <span>Explore MCP server</span>
@@ -143,6 +223,29 @@ export default function HomePage() {
               </Link>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="formats-heading">
+        <div className="container">
+          <div className="section-header">
+            <p className="section-kicker">Open standards</p>
+            <h2 id="formats-heading">Interoperable tracks, maps, and editor timelines</h2>
+            <p>
+              Export deterministic, byte-identical files from either the desktop app or the CLI for GIS tools, web viewers, and non-linear video editors.
+            </p>
+          </div>
+
+          <ul className="tag-list" aria-label="Supported output and export formats">
+            <li className="tag-item">.mp4 (H.264 / H.265 map video)</li>
+            <li className="tag-item">.gpx (GPX 1.1 tracks)</li>
+            <li className="tag-item">.geojson (MultiLineString)</li>
+            <li className="tag-item">.kml / .kmz (Google Earth)</li>
+            <li className="tag-item">.json (Per-frame telemetry)</li>
+            <li className="tag-item">.html (Offline Leaflet archive map)</li>
+            <li className="tag-item">.csv (DaVinci Resolve markers)</li>
+            <li className="tag-item">.fcpxml (Final Cut Pro 1.10 markers)</li>
+          </ul>
         </div>
       </section>
     </>
