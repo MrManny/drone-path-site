@@ -18,7 +18,7 @@ const softwareJsonLd = {
   url: 'https://dronepath.dev/',
   codeRepository: 'https://github.com/MrManny/drone-path',
   description:
-    'Render synchronized 2D flight-path map overlay videos from DJI drone recordings, index local footage in a SQLite spatial archive, and expose tools to AI agents over Model Context Protocol.',
+    'Render synchronized 2D flight-path map overlay videos from DJI drone recordings, index local footage in a spatial archive, and expose tools to AI agents over Model Context Protocol.',
 };
 
 export default function HomePage() {
@@ -33,10 +33,6 @@ export default function HomePage() {
         <HeroContourBackdrop />
         <div className="container hero-grid">
           <div>
-            <p className="eyebrow">
-              <span className="eyebrow-dot" aria-hidden="true" />
-              <span>MIT License · DJI Neo 2 &amp; DVTM / SRT telemetry · Node.js 24+</span>
-            </p>
             <h1 id="hero-heading">
               Render synchronized flight-path map videos from DJI drone footage.
             </h1>
@@ -100,7 +96,6 @@ export default function HomePage() {
               <p>
                 Reads DJI&apos;s protobuf telemetry stream directly from the MP4 container when present—extracting GPS coordinates, absolute altitude, 3-axis body and gimbal attitude, drone yaw heading, and camera exposure settings per frame.
               </p>
-              <p className="card-meta">Primary source · No sidecar file required</p>
             </article>
 
             <article className="card">
@@ -108,7 +103,6 @@ export default function HomePage() {
               <p>
                 Automatically parses an adjacent <span className="inline-code">.SRT</span> subtitle telemetry file when no embedded CAM meta stream exists, computing heading from the GPS track and breaking lines cleanly across signal gaps.
               </p>
-              <p className="card-meta">Automatic fallback · Gap-aware segmentation</p>
             </article>
           </div>
         </div>
@@ -124,7 +118,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="card-grid-3">
+          <div className="showcase-stack">
             <figure className="media-figure">
               <div className="media-frame">
                 <img
@@ -135,37 +129,39 @@ export default function HomePage() {
                 />
               </div>
               <figcaption className="media-caption">
-                Source DJI recording frame used as input for the map renders beside it.
+                Source DJI recording frame used as input for the map renders below.
               </figcaption>
             </figure>
 
-            <figure className="media-figure">
-              <div className="media-frame">
-                <img
-                  src="/images/example-map-satellite.jpg"
-                  alt="Rendered 768 by 768 satellite map video frame showing the growing coral flight trail and drone heading arrow"
-                  width={768}
-                  height={768}
-                />
-              </div>
-              <figcaption className="media-caption">
-                Default output (<span className="inline-code">drone-path &quot;flight.mp4&quot;</span>): Esri World Imagery satellite map, growing flight trail, and heading arrow.
-              </figcaption>
-            </figure>
+            <div className="card-grid-2">
+              <figure className="media-figure">
+                <div className="media-frame">
+                  <img
+                    src="/images/example-map-satellite.jpg"
+                    alt="Rendered 768 by 768 satellite map video frame showing the growing coral flight trail and drone heading arrow"
+                    width={768}
+                    height={768}
+                  />
+                </div>
+                <figcaption className="media-caption">
+                  Default output (<span className="inline-code">drone-path &quot;flight.mp4&quot;</span>): Esri World Imagery satellite map, growing flight trail, and heading arrow.
+                </figcaption>
+              </figure>
 
-            <figure className="media-figure">
-              <div className="media-frame">
-                <img
-                  src="/images/example-map-topo-hud.jpg"
-                  alt="Rendered topographic map video frame with heading, altitude, and speed HUD readout chips along the bottom"
-                  width={768}
-                  height={768}
-                />
-              </div>
-              <figcaption className="media-caption">
-                Topographic style (<span className="inline-code">--style topo --hud heading,alt,speed</span>): OpenTopoMap contours with live telemetry chips.
-              </figcaption>
-            </figure>
+              <figure className="media-figure">
+                <div className="media-frame">
+                  <img
+                    src="/images/example-map-topo-hud.jpg"
+                    alt="Rendered topographic map video frame with heading, altitude, and speed HUD readout chips along the bottom"
+                    width={768}
+                    height={768}
+                  />
+                </div>
+                <figcaption className="media-caption">
+                  Topographic style (<span className="inline-code">--style topo --hud heading,alt,speed</span>): OpenTopoMap contours with live telemetry chips.
+                </figcaption>
+              </figure>
+            </div>
           </div>
         </div>
       </section>
@@ -201,7 +197,7 @@ export default function HomePage() {
               </div>
               <h3>CLI &amp; spatial archive</h3>
               <p>
-                A scriptable command-line tool for batch map rendering, fast keyframe extraction, and indexing local recordings into a <span className="inline-code">node:sqlite</span> archive with camera gaze search and shot segmentation.
+                A scriptable command-line tool for batch map rendering, fast keyframe extraction, and indexing local recordings into a searchable archive with camera gaze search and shot segmentation.
               </p>
               <Link href="/cli/" className="card-link">
                 <span>Explore CLI &amp; archive</span>
@@ -215,12 +211,29 @@ export default function HomePage() {
               </div>
               <h3>MCP server</h3>
               <p>
-                A root-confined stdio JSON-RPC 2.0 server giving Claude Desktop, Cursor, and other MCP clients 9 structured tools to search flights, inspect frames, export NLE markers, and render overlays locally.
+                A root-confined stdio JSON-RPC 2.0 server giving Claude Desktop, Cursor, and other MCP clients 9 structured tools to search flights, inspect frames, export video editor timeline markers, and render overlays locally.
               </p>
               <Link href="/mcp/" className="card-link">
                 <span>Explore MCP server</span>
                 <ArrowRightIcon />
               </Link>
+            </article>
+          </div>
+
+          <h3 className="subsection-heading">Example AI workflows</h3>
+          <div className="card-grid-2">
+            <article className="card">
+              <h3>Draft social &amp; YouTube edits</h3>
+              <p>
+                Automatically detect smooth, scenic shots near a location with <span className="inline-code">drone-path</span>, inspect extracted keyframes, and export timeline markers to assemble a rough cut for YouTube or social media.
+              </p>
+            </article>
+
+            <article className="card">
+              <h3>Open-data &amp; OpenStreetMap checks</h3>
+              <p>
+                Cross-reference objects and landmarks captured from multiple angles across flights to spot missing details or potential open-data improvements for OpenStreetMap and similar mapping projects.
+              </p>
             </article>
           </div>
         </div>
@@ -236,15 +249,39 @@ export default function HomePage() {
             </p>
           </div>
 
-          <ul className="tag-list" aria-label="Supported output and export formats">
-            <li className="tag-item">.mp4 (H.264 / H.265 map video)</li>
-            <li className="tag-item">.gpx (GPX 1.1 tracks)</li>
-            <li className="tag-item">.geojson (MultiLineString)</li>
-            <li className="tag-item">.kml / .kmz (Google Earth)</li>
-            <li className="tag-item">.json (Per-frame telemetry)</li>
-            <li className="tag-item">.html (Offline Leaflet archive map)</li>
-            <li className="tag-item">.csv (DaVinci Resolve markers)</li>
-            <li className="tag-item">.fcpxml (Final Cut Pro 1.10 markers)</li>
+          <ul className="format-list" aria-label="Supported output and export formats">
+            <li>
+              <span className="format-ext">.mp4</span>
+              <span>H.264 or H.265 flight-path map overlay videos matched to source frame rate</span>
+            </li>
+            <li>
+              <span className="format-ext">.gpx</span>
+              <span>GPX 1.1 flight tracks for mapping and GIS software</span>
+            </li>
+            <li>
+              <span className="format-ext">.geojson</span>
+              <span>GeoJSON MultiLineString tracks for web maps and spatial scripts</span>
+            </li>
+            <li>
+              <span className="format-ext">.kml / .kmz</span>
+              <span>KML 2.2 and compressed KMZ tracks for Google Earth</span>
+            </li>
+            <li>
+              <span className="format-ext">.json</span>
+              <span>Per-frame telemetry documents covering position, attitude, and exposure</span>
+            </li>
+            <li>
+              <span className="format-ext">.html</span>
+              <span>Standalone offline Leaflet archive maps with optional launch-zone redaction</span>
+            </li>
+            <li>
+              <span className="format-ext">.csv</span>
+              <span>DaVinci Resolve timeline markers generated from detected shot segments</span>
+            </li>
+            <li>
+              <span className="format-ext">.fcpxml</span>
+              <span>Final Cut Pro 1.10 XML timeline markers and asset clips</span>
+            </li>
           </ul>
         </div>
       </section>
