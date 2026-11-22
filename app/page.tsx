@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import styles from './page.module.css';
 import {
   ArrowRightIcon,
   GitHubIcon,
@@ -64,19 +65,30 @@ export default function HomePage() {
             </div>
           </div>
 
-          <figure className="media-figure">
-            <div className="media-frame">
-              <img
-                src="/images/app-main-window.jpg"
-                alt="Drone Path desktop app displaying a drone recording over an autumn forest beside a synchronized satellite flight map, orange flight trail, and live telemetry readout strip"
-                width={1440}
-                height={900}
-              />
+          <div className={`media-figure ${styles.heroScreenshot}`}>
+            <img
+              src="/images/app-main-window.jpg"
+              alt="Drone Path desktop app displaying a drone recording over an autumn forest beside a synchronized satellite flight map, orange flight trail, and live telemetry readout strip"
+              width={1440}
+              height={900}
+            />
+          </div>
+
+          <section className={styles.whatsNew} aria-labelledby="whats-new-heading">
+            <h2 id="whats-new-heading">What&apos;s new?</h2>
+            <div className={styles.highlights}>
+              <div className={styles.featured}>
+                <h3>Automatic shot detection <span className={styles.version}>v1.1.0</span></h3>
+                <p>
+                  Find smooth shots using flight telemetry, pull JPEG keyframes with telemetry snapshots, and export shot markers to DaVinci Resolve or Final Cut Pro.
+                </p>
+              </div>
+              <ul className={styles.secondary}>
+                <li><strong>MCP server</strong> <span className={styles.version}>v1.1.0</span> – Let AI assistants search footage, inspect keyframes, and render map overlays.</li>
+                <li><strong>Searchable flight archive</strong> <span className={styles.version}>v1.0.0</span> – Index local clips, find footage by where the drone flew or pointed its camera, and export grouped flights.</li>
+              </ul>
             </div>
-            <figcaption className="media-caption">
-              The desktop app playing a DJI recording beside its synchronized 2D flight map, with the growing trail, heading marker, and telemetry strip sharing one timeline.
-            </figcaption>
-          </figure>
+          </section>
         </div>
       </section>
 
@@ -91,14 +103,14 @@ export default function HomePage() {
           </div>
 
           <div className="card-grid-2">
-            <article className="card">
+            <article className={styles.feature}>
               <h3>Embedded CAM meta (DVTM)</h3>
               <p>
                 Reads DJI&apos;s protobuf telemetry stream directly from the MP4 container when present—extracting GPS coordinates, absolute altitude, 3-axis body and gimbal attitude, drone yaw heading, and camera exposure settings per frame.
               </p>
             </article>
 
-            <article className="card">
+            <article className={styles.feature}>
               <h3>.SRT sidecar telemetry</h3>
               <p>
                 Automatically parses an adjacent <span className="inline-code">.SRT</span> subtitle telemetry file when no embedded CAM meta stream exists, computing heading from the GPS track and breaking lines cleanly across signal gaps.
@@ -118,50 +130,34 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="showcase-stack">
+          <div className="card-grid-2">
             <figure className="media-figure">
               <div className="media-frame">
                 <img
-                  src="/images/example-source-frame.jpg"
-                  alt="Source aerial drone frame looking across an autumn forest and mountain ridge"
-                  width={1280}
-                  height={720}
+                  src="/images/example-map-satellite.jpg"
+                  alt="Rendered 768 by 768 satellite map video frame showing the growing coral flight trail and drone heading arrow"
+                  width={768}
+                  height={768}
                 />
               </div>
               <figcaption className="media-caption">
-                Source DJI recording frame used as input for the map renders below.
+                Default satellite output: Esri World Imagery map, growing flight trail, and heading arrow.
               </figcaption>
             </figure>
 
-            <div className="card-grid-2">
-              <figure className="media-figure">
-                <div className="media-frame">
-                  <img
-                    src="/images/example-map-satellite.jpg"
-                    alt="Rendered 768 by 768 satellite map video frame showing the growing coral flight trail and drone heading arrow"
-                    width={768}
-                    height={768}
-                  />
-                </div>
-                <figcaption className="media-caption">
-                  Default satellite output: Esri World Imagery map, growing flight trail, and heading arrow.
-                </figcaption>
-              </figure>
-
-              <figure className="media-figure">
-                <div className="media-frame">
-                  <img
-                    src="/images/example-map-topo-hud.jpg"
-                    alt="Rendered topographic map video frame with heading, altitude, and speed HUD readout chips along the bottom"
-                    width={768}
-                    height={768}
-                  />
-                </div>
-                <figcaption className="media-caption">
-                  Topographic style: OpenTopoMap contours with live telemetry chips.
-                </figcaption>
-              </figure>
-            </div>
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/example-map-topo-hud.jpg"
+                  alt="Rendered topographic map video frame with heading, altitude, and speed HUD readout chips along the bottom"
+                  width={768}
+                  height={768}
+                />
+              </div>
+              <figcaption className="media-caption">
+                Topographic style: OpenTopoMap contours with live telemetry chips.
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
@@ -177,8 +173,8 @@ export default function HomePage() {
           </div>
 
           <div className="card-grid-3">
-            <article className="card">
-              <div className="card-icon">
+            <article className={styles.feature}>
+              <div className={styles.featureIcon} aria-hidden="true">
                 <MonitorIcon />
               </div>
               <h3>Desktop app</h3>
@@ -191,8 +187,8 @@ export default function HomePage() {
               </Link>
             </article>
 
-            <article className="card">
-              <div className="card-icon">
+            <article className={styles.feature}>
+              <div className={styles.featureIcon} aria-hidden="true">
                 <TerminalIcon />
               </div>
               <h3>CLI &amp; spatial archive</h3>
@@ -205,8 +201,8 @@ export default function HomePage() {
               </Link>
             </article>
 
-            <article className="card">
-              <div className="card-icon">
+            <article className={styles.feature}>
+              <div className={styles.featureIcon} aria-hidden="true">
                 <ServerIcon />
               </div>
               <h3>MCP server</h3>
@@ -222,14 +218,14 @@ export default function HomePage() {
 
           <h3 className="subsection-heading">Example AI workflows</h3>
           <div className="card-grid-2">
-            <article className="card">
+            <article className={styles.feature}>
               <h3>Draft social &amp; YouTube edits</h3>
               <p>
                 Automatically detect smooth, scenic shots near a location with <span className="inline-code">drone-path</span>, inspect extracted keyframes, and export timeline markers to assemble a rough cut for YouTube or social media.
               </p>
             </article>
 
-            <article className="card">
+            <article className={styles.feature}>
               <h3>Open-data &amp; OpenStreetMap checks</h3>
               <p>
                 Cross-reference objects and landmarks captured from multiple angles across flights to spot missing details or potential open-data improvements for OpenStreetMap and similar mapping projects.
