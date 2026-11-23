@@ -1,0 +1,64 @@
+.terminal {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  background: #1a1a1a;
+}
+
+.toolbar {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--surface-1);
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.transcript {
+  display: grid;
+  gap: 16px;
+  padding: 14px 16px;
+  font: 13.5px/1.65 var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.command {
+  display: flex;
+  gap: 0.75ch;
+}
+
+.input {
+  display: grid;
+  min-width: 0;
+}
+
+.input code {
+  grid-area: 1 / 1;
+  white-space: pre-wrap;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.note,
+.processing {
+  color: var(--text-3);
+}
+
+.prompt,
+.cursor {
+  color: var(--accent-text);
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1em;
+  vertical-align: -0.15em;
+  background: currentColor;
+}
+
+.result {
+  color: #a8c998;
+}

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
 import { createPageMetadata } from '../../lib/metadata';
+import { TerminalDemo, type TerminalExample } from './TerminalDemo';
+import styles from './page.module.css';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'CLI & spatial archive',
@@ -18,16 +20,94 @@ export const metadata: Metadata = createPageMetadata({
   },
 });
 
+const quickStart: TerminalExample[] = [
+  {
+    command: 'npx drone-path "my-flight.mp4" --style topo --hud heading,alt,speed',
+    processing: 'Reading DJI telemetry and rendering map frames…',
+    result: 'Wrote out/my-flight_map.mp4',
+  },
+];
+
+const renderExamples: TerminalExample[] = [
+  {
+    note: 'Satellite map with a growing trail',
+    command: 'drone-path "flight.mp4"',
+    processing: 'Rendering satellite map frames…',
+    result: 'Wrote out/flight_map.mp4',
+  },
+  {
+    note: 'Topographic map with HUD chips and a custom trail color',
+    command: 'drone-path "flight.mp4" --style topo --hud heading,alt,speed --trail-color "#e63946cc"',
+    processing: 'Rendering topographic map and HUD…',
+    result: 'Wrote out/flight_map.mp4',
+  },
+  {
+    note: 'Incremental batch render with NDJSON output',
+    command: 'drone-path ./footage --recurse --skip-existing --json',
+    processing: 'Scanning footage and rendering new clips…',
+    result: 'Batch render complete',
+  },
+];
+
+const keyframeExample: TerminalExample[] = [
+  {
+    command: 'drone-path extract-frame "flight.mp4" --at 2.5,f90 --max-width 640 --json',
+    processing: 'Seeking to 2.5 s and frame 90…',
+    result: 'Extracted 2 JPEGs with telemetry snapshots',
+  },
+];
+
+const archiveExamples: TerminalExample[] = [
+  {
+    note: 'Index footage recursively, skipping unchanged files and *_map.mp4 outputs',
+    command: 'drone-path archive scan /path/to/footage --recurse --json',
+    processing: 'Reading telemetry from new and changed clips…',
+    result: 'Archive index updated',
+  },
+  {
+    note: 'Group clips into inferred flights',
+    command: 'drone-path archive list --group-by flight',
+    processing: 'Grouping clips by flight…',
+    result: 'Found 3 flights',
+  },
+  {
+    note: 'Find smooth-glide shots',
+    command: 'drone-path archive list --segment-type smooth-glide --min-smoothness 0.8 --json',
+    processing: 'Filtering shots by type and smoothness…',
+    result: 'Found 5 matching shots',
+  },
+  {
+    note: 'Find clips that passed near or looked toward a coordinate',
+    command: 'drone-path archive near 46.62,14.31 --radius 250 --include-gaze --json',
+    processing: 'Checking flight tracks and camera footprints…',
+    result: 'Found 4 matching clips',
+  },
+  {
+    note: 'Export editor markers',
+    command: 'drone-path archive export-markers shots.csv --segment-type smooth-glide',
+    processing: 'Collecting smooth-glide segments…',
+    result: 'Wrote shots.csv',
+  },
+  {
+    note: 'Export a standalone map with camera gaze and launch redaction',
+    command: 'drone-path archive export-map flights.html --include-gaze --redact-launch 150',
+    processing: 'Building map and redacting launch zones…',
+    result: 'Wrote flights.html',
+  },
+  {
+    note: 'Export combined tracks with launch redaction',
+    command: 'drone-path archive export-tracks flights.gpx --redact-launch 150',
+    processing: 'Combining tracks and redacting launch zones…',
+    result: 'Wrote flights.gpx',
+  },
+];
+
 export default function CliPage() {
   return (
     <>
       <section className="hero" aria-labelledby="cli-heading">
         <HeroContourBackdrop />
         <div className="container hero-grid-single">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" aria-hidden="true" />
-            <span>Node.js 24 or 26 · Bundled FFmpeg &amp; FFprobe</span>
-          </p>
           <h1 id="cli-heading">
             Scriptable rendering, track exports, and spatial library search.
           </h1>
@@ -47,10 +127,7 @@ export default function CliPage() {
               Expose tools via MCP
             </Link>
           </div>
-          <div className="hero-command" role="region" aria-label="Run CLI with npx">
-            <span className="hero-command-prompt" aria-hidden="true">$</span>
-            <code>npx drone-path &quot;my-flight.mp4&quot; --style topo --hud heading,alt,speed</code>
-          </div>
+          <TerminalDemo label="Run CLI with npx" examples={quickStart} />
         </div>
       </section>
 
@@ -64,16 +141,9 @@ export default function CliPage() {
             </p>
           </div>
 
-          <pre className="code-block" aria-label="CLI render examples" style={{ marginBottom: '28px' }}>
-            <code>
-              <span className="code-comment"># Default render: satellite map, growing trail, writes out/flight_map.mp4</span>{'\n'}
-              drone-path &quot;flight.mp4&quot;{'\n\n'}
-              <span className="code-comment"># Topographic map with heading, altitude, and speed HUD chips + custom RGBA trail</span>{'\n'}
-              drone-path &quot;flight.mp4&quot; --style topo --hud heading,alt,speed --trail-color &quot;#e63946cc&quot;{'\n\n'}
-              <span className="code-comment"># Batch render a folder incrementally with NDJSON machine output</span>{'\n'}
-              drone-path ./footage --recurse --skip-existing --json
-            </code>
-          </pre>
+          <div className={styles.demoSpacing}>
+            <TerminalDemo label="CLI render examples" examples={renderExamples} />
+          </div>
 
           <div className="table-scroll" role="region" aria-label="Common CLI render options" tabIndex={0}>
             <table className="spec-table">
@@ -178,11 +248,7 @@ export default function CliPage() {
               <p>
                 Pull JPEG frames at exact seconds (<span className="inline-code">2.5</span>) or 0-based frame numbers (<span className="inline-code">f90</span>) using fast input seeking without decoding preceding GOPs. With <span className="inline-code">--json</span>, each entry returns dimensions and the nearest telemetry snapshot (<span className="inline-code">lat</span>, <span className="inline-code">lon</span>, <span className="inline-code">altRelM</span>, <span className="inline-code">altAbsM</span>, <span className="inline-code">speedMps</span>, <span className="inline-code">headingDeg</span>, gimbal angles, ISO, and shutter).
               </p>
-              <pre className="code-block" aria-label="Extract keyframes example">
-                <code>
-                  drone-path extract-frame &quot;flight.mp4&quot; --at 2.5,f90 --max-width 640 --json
-                </code>
-              </pre>
+              <TerminalDemo label="Extract keyframes example" examples={keyframeExample} />
             </div>
           </div>
         </div>
@@ -198,38 +264,26 @@ export default function CliPage() {
             </p>
           </div>
 
-          <pre className="code-block" aria-label="Spatial archive command examples" style={{ marginBottom: '28px' }}>
-            <code>
-              <span className="code-comment"># 1. Index a footage folder recursively (skips unchanged files and *_map.mp4 outputs)</span>{'\n'}
-              drone-path archive scan /path/to/footage --recurse --json{'\n\n'}
-              <span className="code-comment"># 2. Query clips grouped into inferred flights or ranked by kinematic shot smoothness</span>{'\n'}
-              drone-path archive list --group-by flight{'\n'}
-              drone-path archive list --segment-type smooth-glide --min-smoothness 0.8 --json{'\n\n'}
-              <span className="code-comment"># 3. Find clips passing within 250 m of a coordinate or viewing it in camera gaze</span>{'\n'}
-              drone-path archive near 46.62,14.31 --radius 250 --include-gaze --json{'\n\n'}
-              <span className="code-comment"># 4. Export NLE markers, standalone HTML maps, or launch-redacted combined tracks</span>{'\n'}
-              drone-path archive export-markers shots.csv --segment-type smooth-glide{'\n'}
-              drone-path archive export-map flights.html --include-gaze --redact-launch 150{'\n'}
-              drone-path archive export-tracks flights.gpx --redact-launch 150
-            </code>
-          </pre>
+          <div className={styles.demoSpacing}>
+            <TerminalDemo label="Spatial archive command examples" examples={archiveExamples} />
+          </div>
 
-          <div className="card-grid-3">
-            <article className="card">
+          <div className={`card-grid-3 ${styles.archiveFeatures}`}>
+            <article>
               <h3>Kinematic shot segmentation</h3>
               <p>
                 Deterministically classifies flight segments into <span className="inline-code">takeoff</span>, <span className="inline-code">landing</span>, <span className="inline-code">hover</span>, <span className="inline-code">smooth-glide</span>, <span className="inline-code">orbit</span>, <span className="inline-code">gimbal-reveal</span>, and <span className="inline-code">reposition</span> with smoothness scores from 0 to 1.
               </p>
             </article>
 
-            <article className="card">
+            <article>
               <h3>3D camera gaze search</h3>
               <p>
                 Projects an approximate 75°×50° ground footprint from DVTM gimbal yaw and attitude so <span className="inline-code">archive near --include-gaze</span> finds clips that looked at a landmark even when the drone flew past it.
               </p>
             </article>
 
-            <article className="card">
+            <article>
               <h3>NLE markers &amp; privacy redaction</h3>
               <p>
                 Export shot segments as DaVinci Resolve CSV (<span className="inline-code">.csv</span>) or Final Cut Pro XML 1.10 (<span className="inline-code">.fcpxml</span>) markers, or strip launch/landing geometry from shared maps with <span className="inline-code">--redact-launch &lt;m&gt;</span>.

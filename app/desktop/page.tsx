@@ -25,10 +25,6 @@ export default function DesktopPage() {
         <HeroContourBackdrop />
         <div className="container hero-grid">
           <div>
-            <p className="eyebrow">
-              <span className="eyebrow-dot" aria-hidden="true" />
-              <span>Windows (NSIS / portable) &amp; Linux (AppImage)</span>
-            </p>
             <h1 id="desktop-heading">
               Review flights and export map overlays on one shared timeline.
             </h1>

@@ -18,10 +18,6 @@ export default function McpPage() {
       <section className="hero" aria-labelledby="mcp-heading">
         <HeroContourBackdrop />
         <div className="container hero-grid-single">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" aria-hidden="true" />
-            <span>Model Context Protocol · Stdio JSON-RPC 2.0</span>
-          </p>
           <h1 id="mcp-heading">
             Connect AI agents to your local drone footage without uploading video.
           </h1>

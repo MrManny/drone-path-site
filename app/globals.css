@@ -302,29 +302,6 @@ a:hover {
   max-width: 780px;
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  margin-bottom: 18px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--hairline-strong);
-  background: var(--surface-1);
-  color: var(--accent-text);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-.eyebrow-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex: none;
-}
-
 .hero h1 {
   margin: 0 0 18px;
   font-size: clamp(2rem, 4.2vw, 3.15rem);
