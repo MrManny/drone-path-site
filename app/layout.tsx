@@ -55,9 +55,6 @@ export const metadata: Metadata = {
       'Desktop review app, CLI renderer with spatial SQLite archive, and stdio MCP server for DJI drone recordings.',
     images: ['/images/app-main-window.jpg'],
   },
-  alternates: {
-    canonical: '/',
-  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

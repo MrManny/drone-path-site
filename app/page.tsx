@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import styles from './page.module.css';
 import {
@@ -9,15 +10,47 @@ import {
   TerminalIcon,
 } from '../components/Icons';
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
+
 const softwareJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'Drone Path',
+  softwareVersion: '1.1.0',
   applicationCategory: 'MultimediaApplication',
-  operatingSystem: 'Windows, Linux, macOS',
+  operatingSystem:
+    'Windows, Linux (Desktop app); Windows, Linux, macOS (CLI and MCP server)',
+  isAccessibleForFree: true,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
   license: 'https://opensource.org/licenses/MIT',
   url: 'https://dronepath.dev/',
+  downloadUrl: 'https://github.com/MrManny/drone-path/releases',
   codeRepository: 'https://github.com/MrManny/drone-path',
+  author: {
+    '@type': 'Person',
+    name: 'Manuel Warum',
+    url: 'https://github.com/MrManny',
+  },
+  screenshot: [
+    'https://dronepath.dev/images/app-main-window.jpg',
+    'https://dronepath.dev/images/example-map-satellite.jpg',
+    'https://dronepath.dev/images/example-map-topo-hud.jpg',
+  ],
+  featureList: [
+    'Embedded DJI CAM meta (DVTM) protobuf and .SRT sidecar telemetry extraction',
+    'Frame-accurate 2D satellite and topographic flight-path map overlay video rendering',
+    'Local node:sqlite spatial archive with camera gaze search and kinematic shot segmentation',
+    'GPX, GeoJSON, KML, KMZ, per-frame JSON, DaVinci Resolve CSV, and Final Cut Pro FCPXML exports',
+    'Root-confined stdio JSON-RPC 2.0 Model Context Protocol (MCP) server for AI agents',
+  ],
   description:
     'Render synchronized 2D flight-path map overlay videos from DJI drone recordings, index local footage in a spatial archive, and expose tools to AI agents over Model Context Protocol.',
 };
@@ -27,7 +60,9 @@ export default function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(softwareJsonLd).replace(/</g, '\\u003c'),
+        }}
       />
 
       <section className="hero" aria-labelledby="hero-heading">
@@ -193,7 +228,7 @@ export default function HomePage() {
               </div>
               <h3>CLI &amp; spatial archive</h3>
               <p>
-                A scriptable command-line tool for batch map rendering, fast keyframe extraction, and indexing local recordings into a searchable archive with camera gaze search and shot segmentation.
+                A scriptable command-line tool for Windows, Linux, and macOS (Node.js 24+) for batch map rendering, fast keyframe extraction, and indexing local recordings into a searchable archive with camera gaze search and shot segmentation.
               </p>
               <Link href="/cli/" className="card-link">
                 <span>Explore CLI &amp; archive</span>
@@ -207,7 +242,7 @@ export default function HomePage() {
               </div>
               <h3>MCP server</h3>
               <p>
-                A root-confined stdio JSON-RPC 2.0 server giving Claude Desktop, Cursor, and other MCP clients 9 structured tools to search flights, inspect frames, export video editor timeline markers, and render overlays locally.
+                A root-confined stdio JSON-RPC 2.0 server for Windows, Linux, and macOS giving Claude Desktop, Cursor, and other MCP clients 9 structured tools to search flights, inspect frames, export video editor timeline markers, and render overlays locally.
               </p>
               <Link href="/mcp/" className="card-link">
                 <span>Explore MCP server</span>

@@ -1,21 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
+import { createPageMetadata } from '../../lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'CLI & spatial archive',
   description:
     'Command-line reference for drone-path: batch map video rendering, GPX/GeoJSON/KML/JSON track export, fast keyframe extraction, and the local SQLite spatial archive.',
-  alternates: {
-    canonical: '/cli/',
+  path: '/cli/',
+  ogDescription:
+    'Render flight-path map overlays, extract keyframes with telemetry snapshots, search recordings by coordinates or camera gaze, and export NLE markers.',
+  image: {
+    url: '/images/example-map-topo-hud.jpg',
+    width: 768,
+    height: 768,
+    alt: 'Rendered topographic map video frame with heading, altitude, and speed HUD readout chips along the bottom',
   },
-  openGraph: {
-    title: 'CLI & spatial archive · Drone Path',
-    description:
-      'Render flight-path map overlays, extract keyframes with telemetry snapshots, search recordings by coordinates or camera gaze, and export NLE markers.',
-    images: ['/images/example-map-topo-hud.jpg'],
-  },
-};
+});
 
 export default function CliPage() {
   return (
