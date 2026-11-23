@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
+import { createPageMetadata } from '../../lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'MCP server',
   description:
     'Stdio JSON-RPC 2.0 Model Context Protocol (MCP) server for Drone Path. Confine AI agents with --allow-root to search flights, inspect telemetry, extract keyframes, export NLE markers, and render map overlays locally.',
-  alternates: {
-    canonical: '/mcp/',
-  },
-};
+  path: '/mcp/',
+  ogDescription:
+    'Connect Claude Desktop, Cursor, and other MCP clients to local DJI drone recordings with 9 structured tools and strict --allow-root filesystem confinement.',
+});
 
 export default function McpPage() {
   return (

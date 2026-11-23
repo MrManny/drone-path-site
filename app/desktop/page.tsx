@@ -1,21 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
+import { createPageMetadata } from '../../lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'Desktop app',
   description:
     'Synchronized video and 2D flight map review player for Windows and Linux with Picture-in-Picture mode, In–Out loop passages, live map appearance preview, and video or track export.',
-  alternates: {
-    canonical: '/desktop/',
+  path: '/desktop/',
+  ogDescription:
+    'Review DJI drone recordings beside a synchronized flight map, mark passages, customize map styling live, and export H.264/H.265 overlays or tracks.',
+  image: {
+    url: '/images/app-review-split.jpg',
+    width: 1440,
+    height: 900,
+    alt: 'Drone Path desktop review workspace showing drone footage on the left and a synchronized 2D flight map with speed, altitude, and zoom strip on the right',
   },
-  openGraph: {
-    title: 'Desktop app · Drone Path',
-    description:
-      'Review DJI drone recordings beside a synchronized flight map, mark passages, customize map styling live, and export H.264/H.265 overlays or tracks.',
-    images: ['/images/app-review-split.jpg'],
-  },
-};
+});
 
 export default function DesktopPage() {
   return (
