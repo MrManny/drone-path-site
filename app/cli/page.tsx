@@ -1,17 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
+import { FaqSection, type FaqItem } from '../../components/Faq';
 import { createPageMetadata } from '../../lib/metadata';
 import { TerminalDemo, type TerminalExample } from './TerminalDemo';
 import styles from './page.module.css';
 
 export const metadata: Metadata = createPageMetadata({
-  title: 'CLI & spatial archive',
+  title: 'Extract GPS from DJI Video – SRT to GPX, KML & GeoJSON CLI',
   description:
-    'Command-line reference for drone-path: batch map video rendering, GPX/GeoJSON/KML/JSON track export, fast keyframe extraction, and the local SQLite spatial archive.',
+    'Free command-line tool that extracts GPS telemetry from DJI videos and .SRT files, converts it to GPX, KML, or GeoJSON, renders map overlays in batch, and organizes footage by location.',
   path: '/cli/',
   ogDescription:
-    'Render flight-path map overlays, extract keyframes with telemetry snapshots, search recordings by coordinates or camera gaze, and export NLE markers.',
+    'Convert DJI telemetry to GPX/KML/GeoJSON, batch-render flight-path map overlays, extract keyframes, search drone footage by location, and export editor markers.',
   image: {
     url: '/images/example-map-topo-hud.jpg',
     width: 768,
@@ -102,6 +103,29 @@ const archiveExamples: TerminalExample[] = [
   },
 ];
 
+const cliFaq: FaqItem[] = [
+  {
+    question: 'How do I convert DJI .SRT telemetry to GPX or KML?',
+    answer:
+      'Run drone-path "flight.mp4" --track-out flight.gpx with the .SRT file next to the video. The output format follows the file extension: .gpx, .kml, .kmz, .geojson, or .json. If the MP4 already embeds DJI CAM meta (DVTM) telemetry, no .SRT file is needed.',
+  },
+  {
+    question: 'Can I process a whole folder of drone videos?',
+    answer:
+      'Yes. Pass a folder with --recurse to render every clip, and add --skip-existing to only process new recordings. Add --json for machine-readable NDJSON output in scripts.',
+  },
+  {
+    question: 'How do I find drone footage of a specific place?',
+    answer:
+      'Index your footage once with drone-path archive scan, then run drone-path archive near <lat>,<lon> --radius 250 --include-gaze to list every clip that flew near the spot or pointed its camera at it. The index also remembers clips on disconnected external drives.',
+  },
+  {
+    question: 'What do I need to run the CLI?',
+    answer:
+      'Node.js 24 or newer on Windows, Linux, or macOS. FFmpeg and FFprobe are bundled, so npx drone-path works without extra setup. The CLI is free and open source under the MIT license.',
+  },
+];
+
 export default function CliPage() {
   return (
     <>
@@ -109,10 +133,10 @@ export default function CliPage() {
         <HeroContourBackdrop />
         <div className="container hero-grid-single">
           <h1 id="cli-heading">
-            Scriptable rendering, track exports, and spatial library search.
+            Extract GPS from DJI videos, render map overlays, and search your footage.
           </h1>
           <p className="hero-lead">
-            The <span className="inline-code">drone-path</span> CLI powers batch video rendering, targeted keyframe extraction, deterministic track exports, and a local <span className="inline-code">node:sqlite</span> archive that lets you query hours of DJI footage in milliseconds.
+            The free, open-source <span className="inline-code">drone-path</span> CLI converts DJI telemetry (embedded in the MP4 or from .SRT files) to GPX, KML, and GeoJSON, batch-renders flight-path map overlay videos, extracts keyframes, and builds a local footage library that finds clips by location in milliseconds.
           </p>
           <div className="cta-row">
             <a
@@ -201,7 +225,7 @@ export default function CliPage() {
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Tracks &amp; keyframes</p>
-            <h2 id="tracks-heading">Truthful track exports and fast keyframe extraction</h2>
+            <h2 id="tracks-heading">Convert DJI telemetry to GPX, KML, and GeoJSON tracks</h2>
             <p>
               Track vertices sit only at decoded GPS fixes—telemetry gaps break lines into separate segments, altitude uses absolute GPS meters above mean sea level, and timestamps are never invented.
             </p>
@@ -257,10 +281,10 @@ export default function CliPage() {
       <section className="section section-alt" aria-labelledby="archive-heading">
         <div className="container">
           <div className="section-header">
-            <p className="section-kicker">Spatial archive</p>
-            <h2 id="archive-heading">Index, search, and export your entire recording library</h2>
+            <p className="section-kicker">Footage library</p>
+            <h2 id="archive-heading">Organize and search your drone footage by location</h2>
             <p>
-              Backed by Node 24&apos;s built-in <span className="inline-code">node:sqlite</span> with zero native addons, <span className="inline-code">drone-path archive</span> indexes clips incrementally and remembers footage even when external drives are disconnected (<span className="inline-code">offline</span> vs. <span className="inline-code">online</span>).
+              <span className="inline-code">drone-path archive</span> indexes clips incrementally into a local spatial archive (Node 24&apos;s built-in <span className="inline-code">node:sqlite</span>, zero native addons) and remembers footage even when external drives are disconnected (<span className="inline-code">offline</span> vs. <span className="inline-code">online</span>).
             </p>
           </div>
 
@@ -277,9 +301,9 @@ export default function CliPage() {
             </article>
 
             <article>
-              <h3>3D camera gaze search</h3>
+              <h3>Search by where the camera pointed</h3>
               <p>
-                Projects an approximate 75°×50° ground footprint from DVTM gimbal yaw and attitude so <span className="inline-code">archive near --include-gaze</span> finds clips that looked at a landmark even when the drone flew past it.
+                Projects an approximate 75°×50° ground footprint from the gimbal angles embedded in DJI videos (DVTM) so <span className="inline-code">archive near --include-gaze</span> finds clips that looked at a landmark even when the drone flew past it.
               </p>
             </article>
 
@@ -292,6 +316,8 @@ export default function CliPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection id="cli-faq-heading" items={cliFaq} />
     </>
   );
 }

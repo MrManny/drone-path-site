@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
 
-const LAST_MODIFIED = '2026-11-23';
+const LAST_MODIFIED = '2026-11-27';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://dronepath.dev';

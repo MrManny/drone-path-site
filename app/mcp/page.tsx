@@ -1,16 +1,40 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
+import { FaqSection, type FaqItem } from '../../components/Faq';
 import { createPageMetadata } from '../../lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
-  title: 'MCP server',
+  title: 'DJI MCP Server for Claude, Cursor & AI Agents',
   description:
-    'Stdio JSON-RPC 2.0 Model Context Protocol (MCP) server for Drone Path. Confine AI agents with --allow-root to search flights, inspect telemetry, extract keyframes, export NLE markers, and render map overlays locally.',
+    'Free, local Model Context Protocol (MCP) server that lets Claude Desktop, Cursor, and other AI assistants search your DJI drone footage, inspect telemetry and frames, and render map overlays.',
   path: '/mcp/',
   ogDescription:
-    'Connect Claude Desktop, Cursor, and other MCP clients to local DJI drone recordings with 9 structured tools and strict --allow-root filesystem confinement.',
+    'Connect Claude Desktop, Cursor, and other MCP clients to local DJI drone recordings with 9 structured tools and strict --allow-root filesystem confinement. No video uploads.',
 });
+
+const mcpFaq: FaqItem[] = [
+  {
+    question: 'What is the Drone Path MCP server?',
+    answer:
+      'A free, open-source Model Context Protocol server started with npx drone-path mcp. It gives AI assistants such as Claude Desktop and Cursor nine tools to index, search, and inspect your DJI drone footage and to render flight-path map overlays.',
+  },
+  {
+    question: 'Does my drone footage get uploaded to the AI provider?',
+    answer:
+      'No. The server runs locally over stdio, so raw video stays on your disk. The assistant only receives the structured results it asks for, such as clip lists, telemetry summaries, or small JPEG keyframes.',
+  },
+  {
+    question: 'Can the AI fly or control my drone?',
+    answer:
+      'No. Drone Path works only with recorded footage. It reads telemetry from existing video files and has no connection to the drone or controller.',
+  },
+  {
+    question: 'How do I add it to Claude Desktop or Cursor?',
+    answer:
+      'Add a drone-path entry to the mcpServers section of your client configuration with the command npx and the arguments -y drone-path mcp --allow-root followed by your footage folder. The --allow-root folders are the only places the tools can read or write.',
+  },
+];
 
 export default function McpPage() {
   return (
@@ -19,10 +43,10 @@ export default function McpPage() {
         <HeroContourBackdrop />
         <div className="container hero-grid-single">
           <h1 id="mcp-heading">
-            Connect AI agents to your local drone footage without uploading video.
+            DJI MCP server: let AI assistants search your local drone footage.
           </h1>
           <p className="hero-lead">
-            <span className="inline-code">drone-path mcp</span> starts a local Model Context Protocol server over <span className="inline-code">stdin</span> and <span className="inline-code">stdout</span>. Agents query your spatial archive, inspect targeted keyframes and telemetry, export NLE markers, and render flight-path videos while raw 4K footage stays on your disk.
+            <span className="inline-code">drone-path mcp</span> starts a free, local Model Context Protocol (MCP) server for Claude Desktop, Cursor, and other AI assistants. Agents search your DJI footage by location and shot type, inspect keyframes and telemetry, export video editor markers, and render flight-path map videos while raw 4K footage stays on your disk.
           </p>
           <div className="cta-row">
             <a
@@ -238,6 +262,8 @@ export default function McpPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection id="mcp-faq-heading" items={mcpFaq} alt />
     </>
   );
 }

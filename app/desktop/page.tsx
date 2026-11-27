@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroContourBackdrop } from '../../components/Icons';
+import { FaqSection, type FaqItem } from '../../components/Faq';
 import { createPageMetadata } from '../../lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
-  title: 'Desktop app',
+  title: 'DJI Telemetry Overlay App for Windows & Linux (Free)',
   description:
-    'Synchronized video and 2D flight map review player for Windows and Linux with Picture-in-Picture mode, In–Out loop passages, live map appearance preview, and video or track export.',
+    'Free, open-source desktop app that plays DJI drone footage beside a synchronized flight-path map and exports map overlay videos and GPX, KML, or GeoJSON tracks.',
   path: '/desktop/',
   ogDescription:
-    'Review DJI drone recordings beside a synchronized flight map, mark passages, customize map styling live, and export H.264/H.265 overlays or tracks.',
+    'Review DJI drone recordings beside a synchronized flight map, mark passages, customize map styling live, and export H.264/H.265 overlays or GPX/KML tracks. Free for Windows and Linux.',
   image: {
     url: '/images/app-review-split.jpg',
     width: 1440,
@@ -17,6 +18,34 @@ export const metadata: Metadata = createPageMetadata({
     alt: 'Drone Path desktop review workspace showing drone footage on the left and a synchronized 2D flight map with speed, altitude, and zoom strip on the right',
   },
 });
+
+const desktopFaq: FaqItem[] = [
+  {
+    question: 'Is the desktop app free?',
+    answer:
+      'Yes. The Drone Path desktop app is free and open source under the MIT license. Download the Windows installer, Windows portable build, or Linux AppImage from GitHub Releases.',
+  },
+  {
+    question: 'Does it work with DJI Neo 2 footage?',
+    answer:
+      'Yes. The desktop app is tested with DJI Neo 2 recordings: open a clip to see its GPS flight path on a synchronized map, then export a map overlay video or GPX, KML, or GeoJSON track. Other DJI drones that embed CAM meta (DVTM) telemetry or write .SRT subtitle files should work too.',
+  },
+  {
+    question: 'Which operating systems are supported?',
+    answer:
+      'Windows (NSIS installer or portable build) and Linux (AppImage). On macOS, use the drone-path CLI, which renders the same map overlays and track exports.',
+  },
+  {
+    question: 'Do I need to install FFmpeg?',
+    answer:
+      'No. The desktop app ships with FFmpeg and FFprobe. Map video export uses your installed Google Chrome or Microsoft Edge.',
+  },
+  {
+    question: 'How do I add the flight map to my edit?',
+    answer:
+      'Choose File → Export video to render an H.264 or H.265 map video with the same frame rate and frame count as your clip, then place it on a track above your footage in DaVinci Resolve, Final Cut Pro, or Premiere Pro. It stays in sync without manual alignment.',
+  },
+];
 
 export default function DesktopPage() {
   return (
@@ -26,10 +55,10 @@ export default function DesktopPage() {
         <div className="container hero-grid">
           <div>
             <h1 id="desktop-heading">
-              Review flights and export map overlays on one shared timeline.
+              Free DJI telemetry overlay app: review flights beside a synchronized map.
             </h1>
             <p className="hero-lead">
-              The Drone Path desktop app puts your recording beside a synchronized 2D flight map. Open any clip, scrub frame by frame without waiting for tile warm-up, mark an In–Out passage, tune the map look live, and export video or telemetry tracks.
+              The free, open-source Drone Path desktop app for Windows and Linux puts your DJI recording beside a synchronized 2D flight-path map. Open any clip, scrub frame by frame without waiting for tile warm-up, mark an In–Out passage, tune the map look live, and export a map overlay video or GPX, KML, and GeoJSON tracks.
             </p>
             <div className="cta-row">
               <a
@@ -243,6 +272,8 @@ export default function DesktopPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection id="desktop-faq-heading" items={desktopFaq} />
     </>
   );
 }

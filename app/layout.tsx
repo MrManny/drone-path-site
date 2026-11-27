@@ -12,11 +12,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://dronepath.dev'),
   title: {
-    default: 'Drone Path — Flight-path map overlays, spatial archive, and MCP server for DJI footage',
+    default: 'Drone Path – Free DJI Flight Path Map Overlay & GPS Telemetry Extractor',
     template: '%s · Drone Path',
   },
   description:
-    'Render synchronized 2D flight-path map videos from DJI drone recordings, index local footage in a spatial SQLite archive, and expose tools to AI agents via MCP.',
+    'Free, open-source tool that extracts GPS telemetry from DJI drone videos and renders flight-path map overlays. Export GPX, KML, or GeoJSON and search footage by location.',
   keywords: [
     'Drone Path',
     'drone-path',
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://dronepath.dev/',
     siteName: 'Drone Path',
-    title: 'Drone Path — Flight-path map overlays, spatial archive, and MCP server for DJI footage',
+    title: 'Drone Path – Free DJI Flight Path Map Overlay & GPS Telemetry Extractor',
     description:
-      'Turn embedded DJI telemetry into synchronized flight-path map overlays, searchable local archives, and agent-ready MCP tools.',
+      'Turn the GPS data in your DJI drone videos into synchronized flight-path map overlays, GPX/KML tracks, a searchable footage library, and AI-ready MCP tools. Free and open source.',
     images: [
       {
         url: '/images/app-main-window.jpg',
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Drone Path — Flight-path map overlays for DJI drone footage',
+    title: 'Drone Path – Free flight path map overlays for DJI drone videos',
     description:
-      'Desktop review app, CLI renderer with spatial SQLite archive, and stdio MCP server for DJI drone recordings.',
+      'Free, open-source desktop app, CLI, and MCP server that turn DJI drone telemetry into map overlay videos and GPX/KML tracks.',
     images: ['/images/app-main-window.jpg'],
   },
 };

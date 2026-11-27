@@ -9,12 +9,41 @@ import {
   ServerIcon,
   TerminalIcon,
 } from '../components/Icons';
+import { FaqSection, type FaqItem } from '../components/Faq';
 
 export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
 };
+
+const homeFaq: FaqItem[] = [
+  {
+    question: 'Is Drone Path free?',
+    answer:
+      'Yes. Drone Path is free, open-source software released under the MIT license. The desktop app, the CLI, and the MCP server all run locally, with no account, subscription, or watermark.',
+  },
+  {
+    question: 'How do I get GPS data out of a DJI video?',
+    answer:
+      'Run npx drone-path "my-flight.mp4" --track-out my-flight.gpx (the track is written alongside the rendered map video), or open the clip in the desktop app and choose File → Export telemetry. Drone Path reads the GPS telemetry embedded in the MP4 (DJI CAM meta / DVTM) or the matching .SRT subtitle file and writes GPX, KML, KMZ, GeoJSON, or per-frame JSON.',
+  },
+  {
+    question: 'Which DJI drones does it work with?',
+    answer:
+      'Drone Path is tested with DJI Neo 2 footage. Other DJI drones that embed CAM meta (DVTM) telemetry in the MP4 or write a .SRT subtitle telemetry file should work too; please report results on GitHub. To get .SRT files, enable video captions or subtitles in the DJI Fly camera settings before you fly.',
+  },
+  {
+    question: 'Can I use the map overlay in DaVinci Resolve, Final Cut Pro, or Premiere Pro?',
+    answer:
+      'Yes. Every rendered map video matches the source clip\'s exact frame rate and frame count, so it drops onto a second video track in any editor without drift. Drone Path can also export detected shots as DaVinci Resolve CSV or Final Cut Pro FCPXML timeline markers.',
+  },
+  {
+    question: 'Does my footage get uploaded anywhere?',
+    answer:
+      'No. Telemetry extraction, rendering, and the footage archive all run on your own computer. Only map tiles (Esri World Imagery or OpenTopoMap) are downloaded while rendering.',
+  },
+];
 
 const softwareJsonLd = {
   '@context': 'https://schema.org',
@@ -45,14 +74,15 @@ const softwareJsonLd = {
     'https://dronepath.dev/images/example-map-topo-hud.jpg',
   ],
   featureList: [
-    'Embedded DJI CAM meta (DVTM) protobuf and .SRT sidecar telemetry extraction',
-    'Frame-accurate 2D satellite and topographic flight-path map overlay video rendering',
-    'Local node:sqlite spatial archive with camera gaze search and kinematic shot segmentation',
-    'GPX, GeoJSON, KML, KMZ, per-frame JSON, DaVinci Resolve CSV, and Final Cut Pro FCPXML exports',
-    'Root-confined stdio JSON-RPC 2.0 Model Context Protocol (MCP) server for AI agents',
+    'Extract GPS telemetry from DJI videos: embedded CAM meta (DVTM) and .SRT subtitle files',
+    'Frame-accurate satellite and topographic flight-path map overlay videos for DJI footage',
+    'Convert DJI telemetry to GPX, KML, KMZ, GeoJSON, and per-frame JSON tracks',
+    'Searchable local drone footage library: find clips by location, camera direction, and shot type',
+    'DaVinci Resolve CSV and Final Cut Pro FCPXML timeline marker export',
+    'Local Model Context Protocol (MCP) server so AI assistants like Claude and Cursor can search your drone footage',
   ],
   description:
-    'Render synchronized 2D flight-path map overlay videos from DJI drone recordings, index local footage in a spatial archive, and expose tools to AI agents over Model Context Protocol.',
+    'Free, open-source tool that extracts GPS telemetry from DJI drone videos, renders synchronized flight-path map overlay videos, exports GPX/KML/GeoJSON tracks, indexes local footage by location, and connects AI agents over Model Context Protocol.',
 };
 
 export default function HomePage() {
@@ -70,10 +100,10 @@ export default function HomePage() {
         <div className="container hero-grid">
           <div>
             <h1 id="hero-heading">
-              Render synchronized flight-path map videos from DJI drone footage.
+              Free, open-source flight-path map overlays for DJI drone videos.
             </h1>
             <p className="hero-lead">
-              Drone Path turns embedded DJI telemetry into 2D flight-path map overlays at the exact frame rate and frame count of your source recording. Index local footage by location and camera gaze, review flights on one timeline, or connect AI agents over Model Context Protocol.
+              Drone Path extracts the GPS telemetry embedded in your DJI videos (or their .SRT files), tested with DJI Neo 2 footage, and renders a 2D flight-path map overlay at the exact frame rate and frame count of the source recording. Export GPX, KML, or GeoJSON tracks, search your footage by location and camera direction, or connect AI assistants over MCP. MIT-licensed and runs entirely on your computer.
             </p>
             <div className="cta-row">
               <a
@@ -131,24 +161,24 @@ export default function HomePage() {
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Telemetry extraction</p>
-            <h2 id="telemetry-heading">Built directly on DJI flight metadata</h2>
+            <h2 id="telemetry-heading">Extract GPS telemetry straight from DJI videos</h2>
             <p>
-              Drone Path decodes positioning, attitude, and camera metadata straight from your recordings without inventing timestamps or interpolating over telemetry dropouts.
+              Drone Path decodes GPS position, altitude, drone and gimbal orientation, and camera settings straight from your recordings without inventing timestamps or interpolating over telemetry dropouts.
             </p>
           </div>
 
           <div className="card-grid-2">
             <article className={styles.feature}>
-              <h3>Embedded CAM meta (DVTM)</h3>
+              <h3>GPS data embedded in the MP4 (CAM meta / DVTM)</h3>
               <p>
-                Reads DJI&apos;s protobuf telemetry stream directly from the MP4 container when present—extracting GPS coordinates, absolute altitude, 3-axis body and gimbal attitude, drone yaw heading, and camera exposure settings per frame.
+                Reads DJI&apos;s embedded telemetry stream (protobuf CAM meta, also called DVTM) directly from the MP4 file when present—extracting GPS coordinates, absolute altitude, 3-axis body and gimbal attitude, drone yaw heading, and camera exposure settings per frame.
               </p>
             </article>
 
             <article className={styles.feature}>
-              <h3>.SRT sidecar telemetry</h3>
+              <h3>DJI .SRT subtitle telemetry</h3>
               <p>
-                Automatically parses an adjacent <span className="inline-code">.SRT</span> subtitle telemetry file when no embedded CAM meta stream exists, computing heading from the GPS track and breaking lines cleanly across signal gaps.
+                Automatically parses the matching <span className="inline-code">.SRT</span> subtitle file DJI writes next to your video when no embedded telemetry stream exists, computing heading from the GPS track and breaking lines cleanly across signal gaps.
               </p>
             </article>
           </div>
@@ -228,7 +258,7 @@ export default function HomePage() {
               </div>
               <h3>CLI &amp; spatial archive</h3>
               <p>
-                A scriptable command-line tool for Windows, Linux, and macOS (Node.js 24+) for batch map rendering, fast keyframe extraction, and indexing local recordings into a searchable archive with camera gaze search and shot segmentation.
+                A scriptable command-line tool for Windows, Linux, and macOS (Node.js 24+) for batch map rendering, converting DJI telemetry to GPX or KML, fast keyframe extraction, and a searchable footage library that finds clips by location, camera direction, and shot type.
               </p>
               <Link href="/cli/" className="card-link">
                 <span>Explore CLI &amp; archive</span>
@@ -242,7 +272,7 @@ export default function HomePage() {
               </div>
               <h3>MCP server</h3>
               <p>
-                A root-confined stdio JSON-RPC 2.0 server for Windows, Linux, and macOS giving Claude Desktop, Cursor, and other MCP clients 9 structured tools to search flights, inspect frames, export video editor timeline markers, and render overlays locally.
+                A local Model Context Protocol (MCP) server for Windows, Linux, and macOS that gives Claude Desktop, Cursor, and other AI assistants 9 tools to search your drone footage, inspect frames, export video editor timeline markers, and render overlays—without uploading video.
               </p>
               <Link href="/mcp/" className="card-link">
                 <span>Explore MCP server</span>
@@ -316,6 +346,8 @@ export default function HomePage() {
           </ul>
         </div>
       </section>
+
+      <FaqSection id="faq-heading" items={homeFaq} alt />
     </>
   );
 }
