@@ -7,17 +7,17 @@ import { createPageMetadata } from '../../lib/metadata';
 export const metadata: Metadata = createPageMetadata({
   title: 'DJI MCP Server for Claude, Cursor & AI Agents',
   description:
-    'Free, local Model Context Protocol (MCP) server that lets Claude Desktop, Cursor, and other AI assistants search your DJI drone footage, inspect telemetry and frames, and render map overlays.',
+    'Free, local Model Context Protocol (MCP) server that lets Claude Desktop, Cursor, and other AI assistants search your DJI drone footage, score shot sharpness, inspect telemetry and frames, and render map overlays.',
   path: '/mcp/',
   ogDescription:
-    'Connect Claude Desktop, Cursor, and other MCP clients to local DJI drone recordings with 9 structured tools and strict --allow-root filesystem confinement. No video uploads.',
+    'Connect Claude Desktop, Cursor, and other MCP clients to local DJI drone recordings with 11 structured tools and strict --allow-root filesystem confinement. No video uploads.',
 });
 
 const mcpFaq: FaqItem[] = [
   {
     question: 'What is the Drone Path MCP server?',
     answer:
-      'A free, open-source Model Context Protocol server started with npx drone-path mcp. It gives AI assistants such as Claude Desktop and Cursor nine tools to index, search, and inspect your DJI drone footage and to render flight-path map overlays.',
+      'A free, open-source Model Context Protocol server started with npx drone-path mcp. It gives AI assistants such as Claude Desktop and Cursor 11 tools to index, search, score sharpness, and inspect your DJI drone footage and to render flight-path map overlays.',
   },
   {
     question: 'Does my drone footage get uploaded to the AI provider?',
@@ -46,7 +46,7 @@ export default function McpPage() {
             DJI MCP server: let AI assistants search your local drone footage.
           </h1>
           <p className="hero-lead">
-            <span className="inline-code">drone-path mcp</span> starts a free, local Model Context Protocol (MCP) server for Claude Desktop, Cursor, and other AI assistants. Agents search your DJI footage by location and shot type, inspect keyframes and telemetry, export video editor markers, and render flight-path map videos while raw 4K footage stays on your disk.
+            <span className="inline-code">drone-path mcp</span> starts a free, local Model Context Protocol (MCP) server for Claude Desktop, Cursor, and other AI assistants. Agents search your DJI footage by location and shot type, score keyframe and clip-wide sharpness, inspect frames and telemetry, export video editor markers, and render flight-path map videos while raw 4K footage stays on your disk.
           </p>
           <div className="cta-row">
             <a
@@ -68,35 +68,124 @@ export default function McpPage() {
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="security-heading">
+      <section className="section section-alt" aria-labelledby="workflows-heading">
         <div className="container">
           <div className="section-header">
-            <p className="section-kicker">Safety boundaries</p>
-            <h2 id="security-heading">Strict filesystem confinement by design</h2>
+            <p className="section-kicker">Agent workflows</p>
+            <h2 id="workflows-heading">What you can ask an AI assistant to do</h2>
             <p>
-              Every file and directory argument accepted by an MCP tool is validated before any read, FFmpeg invocation, or file write occurs.
+              Keep raw 4K video on your disk while Claude Desktop, Cursor, or any MCP client discovers landmarks, ranks your smoothest and sharpest takes, and exports edit-ready timeline markers or map overlays.
             </p>
           </div>
 
-          <div className="card-grid-2">
+          <div className="card-grid-3">
             <article className="card">
-              <h3>Mandatory --allow-root jail</h3>
+              <h3>Location &amp; gaze discovery</h3>
               <p>
-                You must pass at least one existing directory via <span className="inline-code">--allow-root &lt;dir...&gt;</span>. Each root is resolved canonically via <span className="inline-code">realpath</span>, and every input path, discovered clip, and planned output path is verified inside those roots after resolving symlinks and <span className="inline-code">..</span> segments.
+                &ldquo;Scan my trip folder, find every recording whose camera gaze passed over 46.62, 14.31 within 250 m, and summarize the flights.&rdquo;
               </p>
             </article>
 
             <article className="card">
-              <h3>Protected state &amp; safe defaults</h3>
+              <h3>Automated top-shot culling</h3>
               <p>
-                Archive queries filter results to clips inside the allowed roots. Tools cannot overwrite the archive SQLite database (or its <span className="inline-code">-wal</span>, <span className="inline-code">-shm</span>, and <span className="inline-code">-journal</span> files), <span className="inline-code">export_markers</span> and <span className="inline-code">render_map_video</span> refuse to overwrite existing files unless <span className="inline-code">DRONE_PATH_MCP_ALLOW_OVERWRITE=1</span> is set, and <span className="inline-code">render_map_video</span> caps calls at 10 recordings.
+                &ldquo;List smooth-glide shots with smoothness above 0.85, analyze clip-wide sharpness to find the sharpest windows, extract preview keyframes with sharpness scores, and export DaVinci Resolve timeline markers.&rdquo;
+              </p>
+            </article>
+
+            <article className="card">
+              <h3>Targeted map rendering</h3>
+              <p>
+                &ldquo;Render a topographic map overlay with speed and altitude HUD for the selected clip&apos;s best segment and save a GPX track beside it.&rdquo;
               </p>
             </article>
           </div>
         </div>
       </section>
 
-      <section className="section" aria-labelledby="config-heading">
+      <section className="section" aria-labelledby="tools-heading">
+        <div className="container">
+          <div className="section-header">
+            <p className="section-kicker">Tool catalog</p>
+            <h2 id="tools-heading">Eleven tools exposed over MCP</h2>
+            <p>
+              Agents can index clips, search by geography or shot kinematics, analyze and query sharpness timelines, inspect telemetry and frames, and produce NLE markers or map renders.
+            </p>
+          </div>
+
+          <div className="table-scroll" role="region" aria-label="MCP tool catalog" tabIndex={0}>
+            <table className="spec-table">
+              <caption>Tools available in drone-path mcp</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Tool</th>
+                  <th scope="col">Purpose</th>
+                  <th scope="col">Key arguments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"><code>archive_scan</code></th>
+                  <td>Index MP4 folders into the SQLite archive</td>
+                  <td><code>dirs</code>, <code>recurse?</code>, <code>prune?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>archive_list_clips</code></th>
+                  <td>List matching indexed clips</td>
+                  <td><code>bbox?</code>, <code>after?</code>/<code>afterMs?</code>, <code>before?</code>/<code>beforeMs?</code>, <code>minDistanceM?</code>, <code>availability?</code>, <code>segmentType?</code>, <code>minSmoothness?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>archive_list_flights</code></th>
+                  <td>List matching clips grouped into inferred flights</td>
+                  <td>Same filter fields as <code>archive_list_clips</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>archive_find_at_point</code></th>
+                  <td>Find clips passing near or viewing a coordinate</td>
+                  <td><code>lat</code>, <code>lon</code>, <code>radiusM?</code>, <code>includeGaze?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>archive_list_segments</code></th>
+                  <td>List kinematic shot segments ordered by smoothness</td>
+                  <td>Same filter fields as <code>archive_list_clips</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>archive_analyze_sharpness</code></th>
+                  <td>Opt in to clip-wide sharpness analysis and cache the timeline in SQLite</td>
+                  <td><code>videoPath</code>, <code>mode?</code> (<code>sampled</code> | <code>every-frame</code>), <code>analysisWidth?</code>, <code>minEdgeCoverage?</code>, <code>force?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>archive_get_sharpness</code></th>
+                  <td>Query stored sharpness timelines offline (bounded) or export full NDJSON</td>
+                  <td><code>videoPath</code>, <code>mode?</code>, <code>startSec?</code>, <code>endSec?</code>, <code>limit?</code> (1–2000), <code>offset?</code>, <code>outPath?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>clip_get_telemetry</code></th>
+                  <td>Probe a clip and return telemetry summary, shot segments, and sampled track records</td>
+                  <td><code>videoPath</code>, <code>includeSamples?</code>, <code>maxSamples?</code> (1–2000)</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>clip_extract_keyframes</code></th>
+                  <td>Extract JPEG keyframes, telemetry snapshots, and optional sharpness scores</td>
+                  <td><code>videoPath</code>, <code>at</code> (string or array), <code>maxWidth?</code>, <code>outDir?</code>, <code>sharpness?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>export_markers</code></th>
+                  <td>Write DaVinci Resolve CSV or FCPXML markers from ranges or archive filters</td>
+                  <td><code>outputPath</code>, <code>ranges?</code> or <code>filters?</code></td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>render_map_video</code></th>
+                  <td>Render flight-path map overlay videos and optional tracks (max 10 inputs per call)</td>
+                  <td><code>inputs</code>, <code>style?</code>, <code>view?</code>, <code>zoom?</code>, <code>trailColor?</code>, <code>hud?</code>, <code>codec?</code>, <code>quality?</code>, <code>trackOut?</code>, <code>frameStart?</code>, <code>frameEnd?</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-alt" aria-labelledby="config-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Client setup</p>
@@ -159,104 +248,28 @@ export default function McpPage() {
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="tools-heading">
+      <section className="section" aria-labelledby="security-heading">
         <div className="container">
           <div className="section-header">
-            <p className="section-kicker">Tool catalog</p>
-            <h2 id="tools-heading">Nine tools exposed over MCP</h2>
+            <p className="section-kicker">Safety boundaries</p>
+            <h2 id="security-heading">Strict filesystem confinement by design</h2>
             <p>
-              Agents can index clips, search by geography or shot kinematics, inspect telemetry and frames, and produce NLE markers or map renders.
+              Every file and directory argument accepted by an MCP tool is validated before any read, FFmpeg invocation, or file write occurs.
             </p>
           </div>
 
-          <div className="table-scroll" role="region" aria-label="MCP tool catalog" tabIndex={0}>
-            <table className="spec-table">
-              <caption>Tools available in drone-path mcp</caption>
-              <thead>
-                <tr>
-                  <th scope="col">Tool</th>
-                  <th scope="col">Purpose</th>
-                  <th scope="col">Key arguments</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><code>archive_scan</code></th>
-                  <td>Index MP4 folders into the SQLite archive</td>
-                  <td><code>dirs</code>, <code>recurse?</code>, <code>prune?</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>archive_list_clips</code></th>
-                  <td>List matching indexed clips</td>
-                  <td><code>bbox?</code>, <code>after?</code>/<code>afterMs?</code>, <code>before?</code>/<code>beforeMs?</code>, <code>minDistanceM?</code>, <code>availability?</code>, <code>segmentType?</code>, <code>minSmoothness?</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>archive_list_flights</code></th>
-                  <td>List matching clips grouped into inferred flights</td>
-                  <td>Same filter fields as <code>archive_list_clips</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>archive_find_at_point</code></th>
-                  <td>Find clips passing near or viewing a coordinate</td>
-                  <td><code>lat</code>, <code>lon</code>, <code>radiusM?</code>, <code>includeGaze?</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>archive_list_segments</code></th>
-                  <td>List kinematic shot segments ordered by smoothness</td>
-                  <td>Same filter fields as <code>archive_list_clips</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>clip_get_telemetry</code></th>
-                  <td>Probe a clip and return telemetry summary, shot segments, and sampled track records</td>
-                  <td><code>videoPath</code>, <code>includeSamples?</code>, <code>maxSamples?</code> (1–2000)</td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>clip_extract_keyframes</code></th>
-                  <td>Extract JPEG keyframes and telemetry snapshots</td>
-                  <td><code>videoPath</code>, <code>at</code> (string or array), <code>maxWidth?</code>, <code>outDir?</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>export_markers</code></th>
-                  <td>Write DaVinci Resolve CSV or FCPXML markers from ranges or archive filters</td>
-                  <td><code>outputPath</code>, <code>ranges?</code> or <code>filters?</code></td>
-                </tr>
-                <tr>
-                  <th scope="row"><code>render_map_video</code></th>
-                  <td>Render flight-path map overlay videos and optional tracks (max 10 inputs per call)</td>
-                  <td><code>inputs</code>, <code>style?</code>, <code>view?</code>, <code>zoom?</code>, <code>trailColor?</code>, <code>hud?</code>, <code>codec?</code>, <code>quality?</code>, <code>trackOut?</code>, <code>frameStart?</code>, <code>frameEnd?</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="workflows-heading">
-        <div className="container">
-          <div className="section-header">
-            <p className="section-kicker">Agent workflows</p>
-            <h2 id="workflows-heading">Example tasks you can ask an AI assistant</h2>
-          </div>
-
-          <div className="card-grid-3">
+          <div className="card-grid-2">
             <article className="card">
-              <h3>Location &amp; gaze discovery</h3>
+              <h3>Mandatory --allow-root jail</h3>
               <p>
-                &ldquo;Scan my trip folder, find every recording whose camera gaze passed over 46.62, 14.31 within 250 m, and summarize the flights.&rdquo;
+                You must pass at least one existing directory via <span className="inline-code">--allow-root &lt;dir...&gt;</span>. Each root is resolved canonically via <span className="inline-code">realpath</span>, and every input path, discovered clip, and planned output path is verified inside those roots after resolving symlinks and <span className="inline-code">..</span> segments.
               </p>
             </article>
 
             <article className="card">
-              <h3>Automated shot culling</h3>
+              <h3>Protected state &amp; safe defaults</h3>
               <p>
-                &ldquo;List smooth-glide shots with smoothness above 0.85, extract two preview keyframes per shot, and export DaVinci Resolve timeline markers.&rdquo;
-              </p>
-            </article>
-
-            <article className="card">
-              <h3>Targeted map rendering</h3>
-              <p>
-                &ldquo;Render a topographic map overlay with speed and altitude HUD for the selected clip&apos;s best segment and save a GPX track beside it.&rdquo;
+                Archive queries filter results to clips inside the allowed roots. Tools cannot overwrite the archive SQLite database (or its <span className="inline-code">-wal</span>, <span className="inline-code">-shm</span>, and <span className="inline-code">-journal</span> files), <span className="inline-code">export_markers</span> and <span className="inline-code">render_map_video</span> refuse to overwrite existing files unless <span className="inline-code">DRONE_PATH_MCP_ALLOW_OVERWRITE=1</span> is set, <span className="inline-code">archive_get_sharpness</span> (<span className="inline-code">outPath</span>) never overwrites existing files, and <span className="inline-code">render_map_video</span> caps calls at 10 recordings.
               </p>
             </article>
           </div>

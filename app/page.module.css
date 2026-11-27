@@ -79,6 +79,10 @@
   color: var(--accent-text);
 }
 
+.archiveCta {
+  margin-top: 20px;
+}
+
 @media (max-width: 720px) {
   .highlights {
     grid-template-columns: minmax(0, 1fr);

@@ -5,17 +5,17 @@ import { FaqSection, type FaqItem } from '../../components/Faq';
 import { createPageMetadata } from '../../lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
-  title: 'DJI Telemetry Overlay App for Windows & Linux (Free)',
+  title: 'DJI Telemetry Overlay & Flight Archive App for Windows & Linux (Free)',
   description:
-    'Free, open-source desktop app that plays DJI drone footage beside a synchronized flight-path map and exports map overlay videos and GPX, KML, or GeoJSON tracks.',
+    'Free, open-source desktop app with a multi-flight Archive workspace and synchronized Review player for DJI footage. Browse flights on one map, search what filmed a spot, and export overlays or GPX/KML tracks.',
   path: '/desktop/',
   ogDescription:
-    'Review DJI drone recordings beside a synchronized flight map, mark passages, customize map styling live, and export H.264/H.265 overlays or GPX/KML tracks. Free for Windows and Linux.',
+    'Browse DJI flights in the Desktop Archive, search with "What filmed here?", review footage beside a synchronized flight map, and export H.264/H.265 overlays or GPX/KML tracks. Free for Windows and Linux.',
   image: {
-    url: '/images/app-review-split.jpg',
-    width: 1440,
-    height: 900,
-    alt: 'Drone Path desktop review workspace showing drone footage on the left and a synchronized 2D flight map with speed, altitude, and zoom strip on the right',
+    url: '/images/app-archive-workspace.jpg',
+    width: 1600,
+    height: 950,
+    alt: 'Drone Path Desktop Archive workspace showing watched folders, flight-grouped recordings with poster thumbnails, and colored flight tracks on a multi-flight satellite map',
   },
 });
 
@@ -26,14 +26,19 @@ const desktopFaq: FaqItem[] = [
       'Yes. The Drone Path desktop app is free and open source under the MIT license. Download the Windows installer, Windows portable build, or Linux AppImage from GitHub Releases.',
   },
   {
+    question: 'How does the Desktop Archive work with external drives?',
+    answer:
+      'Choose File → Open folder… (or click Add folder…) to watch local or external folders. Clips are indexed into the same local SQLite database used by the CLI and MCP server. When a drive is unplugged, missing clips stay visible as Offline with dashed map tracks so you can still search flights and use "What filmed here?", then reconnect and click Rescan without re-indexing unchanged files.',
+  },
+  {
     question: 'Does it work with DJI Neo 2 footage?',
     answer:
-      'Yes. The desktop app is tested with DJI Neo 2 recordings: open a clip to see its GPS flight path on a synchronized map, then export a map overlay video or GPX, KML, or GeoJSON track. Other DJI drones that embed CAM meta (DVTM) telemetry or write .SRT subtitle files should work too.',
+      'Yes. The desktop app is tested with DJI Neo 2 recordings: open a clip to see its GPS flight path on a synchronized map, or add your footage folder to the Archive workspace to browse all flights on one map. Other DJI drones that embed CAM meta (DVTM) telemetry or write .SRT subtitle files should work too.',
   },
   {
     question: 'Which operating systems are supported?',
     answer:
-      'Windows (NSIS installer or portable build) and Linux (AppImage). On macOS, use the drone-path CLI, which renders the same map overlays and track exports.',
+      'Windows (NSIS installer or portable build) and Linux (AppImage). On macOS, use the drone-path CLI, which renders the same map overlays, track exports, and spatial archive.',
   },
   {
     question: 'Do I need to install FFmpeg?',
@@ -55,10 +60,10 @@ export default function DesktopPage() {
         <div className="container hero-grid">
           <div>
             <h1 id="desktop-heading">
-              Free DJI telemetry overlay app: review flights beside a synchronized map.
+              Free DJI flight archive &amp; synchronized telemetry overlay app.
             </h1>
             <p className="hero-lead">
-              The free, open-source Drone Path desktop app for Windows and Linux puts your DJI recording beside a synchronized 2D flight-path map. Open any clip, scrub frame by frame without waiting for tile warm-up, mark an In–Out passage, tune the map look live, and export a map overlay video or GPX, KML, and GeoJSON tracks.
+              The free, open-source Drone Path desktop app for Windows and Linux pairs the new <strong>Archive</strong> workspace with a frame-accurate <strong>Review</strong> player. Watch footage folders on a multi-flight map, find clips with &ldquo;What filmed here?&rdquo;, then jump straight into Review to scrub beside a live map, mark In–Out passages, and export overlay videos or GPX, KML, and GeoJSON tracks.
             </p>
             <div className="cta-row">
               <a
@@ -82,20 +87,60 @@ export default function DesktopPage() {
           <figure className="media-figure">
             <div className="media-frame">
               <img
-                src="/images/app-review-split.jpg"
-                alt="Drone Path desktop review workspace showing drone footage on the left and a synchronized 2D flight map with speed, altitude, and zoom strip on the right"
-                width={1440}
-                height={900}
+                src="/images/app-archive-workspace.jpg"
+                alt="Drone Path Desktop Archive workspace showing watched folders, flight-grouped recordings with poster thumbnails, and colored flight tracks on a multi-flight satellite map"
+                width={1600}
+                height={950}
               />
             </div>
             <figcaption className="media-caption">
-              Split review workspace: video preview, synchronized flight map, transport controls, and filmstrip timeline.
+              Archive workspace: watched folders, flight-grouped clip list with poster thumbnails, and multi-flight satellite map.
             </figcaption>
           </figure>
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="review-views-heading">
+      <section className="section section-alt" aria-labelledby="archive-heading">
+        <div className="container">
+          <div className="section-header">
+            <p className="section-kicker">Archive workspace · New in v1.2.0</p>
+            <h2 id="archive-heading">Search every flight on one map and jump straight to the shot</h2>
+            <p>
+              Choose <strong>File → Open folder…</strong> to index recordings into the shared SQLite archive. Once watched folders are configured, Drone Path opens straight into Archive mode with an <strong>Archive | Review</strong> tab strip in the header.
+            </p>
+          </div>
+
+          <div className="split-block split-block-reverse">
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/app-archive-point-search.jpg"
+                  alt="What filmed here point-in-view search active over the satellite map with the Clips at this spot popover ranking matching clips"
+                  width={1600}
+                  height={950}
+                />
+              </div>
+              <figcaption className="media-caption">
+                <strong>What filmed here?:</strong> Click any spot on the map to rank clips by camera footprint or track proximity in the <strong>Clips at this spot</strong> popover.
+              </figcaption>
+            </figure>
+
+            <div className="split-copy">
+              <h3>&ldquo;What filmed here?&rdquo;, filters &amp; combined exports</h3>
+              <p>
+                Explore grouped flights on a Satellite or Topographic Canvas map that clusters clips at wide zoom and reveals higher-detail tracks as you zoom in, then click any spot or track to jump into Review.
+              </p>
+              <ul className="feature-list">
+                <li><strong>Point-in-view search:</strong> Matches embedded DVTM camera footprints (<strong>Camera view</strong>, <span className="inline-code">0 m</span>) and nearby tracks; click any online result to open <strong>Review</strong> at that exact second.</li>
+                <li><strong>Rich filtering:</strong> Filter by date range, watched folder, flight, minimum distance, map viewport (<strong>Only in map view</strong>), kinematic shot type, or smoothness score.</li>
+                <li><strong>Offline drives &amp; combined export:</strong> Disconnected clips remain searchable as <strong>Offline</strong> dashed tracks. Export filtered flights as combined GPX, GeoJSON, KML, KMZ, or offline HTML maps with optional launch-area redaction.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="review-views-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Review workspace</p>
@@ -103,6 +148,33 @@ export default function DesktopPage() {
             <p>
               As soon as a recording&apos;s telemetry is decoded, the flight trail draws immediately while map tiles stream on demand—playback never stalls waiting for tiles.
             </p>
+          </div>
+
+          <div className="split-block split-block-reverse" style={{ marginBottom: '40px' }}>
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/app-review-split.jpg"
+                  alt="Drone Path desktop review workspace showing drone footage on the left and a synchronized 2D flight map with speed, altitude, and zoom strip on the right"
+                  width={1440}
+                  height={900}
+                />
+              </div>
+              <figcaption className="media-caption">
+                Split review workspace: video preview, synchronized flight map, transport controls, and filmstrip timeline.
+              </figcaption>
+            </figure>
+
+            <div className="split-copy">
+              <h3>Side-by-side footage and live flight map</h3>
+              <p>
+                Open any clip directly or click <strong>Open in Review</strong> from the Archive to inspect your recording beside a synchronized 2D flight map with a compact Speed, Altitude, and Zoom readout strip.
+              </p>
+              <ul className="feature-list">
+                <li><strong>Instant trail rendering:</strong> The full flight path draws immediately on open while map tiles load smoothly in the background.</li>
+                <li><strong>Tab switching:</strong> Move back and forth between <strong>Archive</strong> and <strong>Review</strong> without losing your filters, map viewport, or playback position.</li>
+              </ul>
+            </div>
           </div>
 
           <div className="split-block" style={{ marginBottom: '40px' }}>
@@ -161,7 +233,7 @@ export default function DesktopPage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="appearance-heading">
+      <section className="section section-alt" aria-labelledby="appearance-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Customization</p>
@@ -203,19 +275,19 @@ export default function DesktopPage() {
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="shortcuts-heading">
+      <section className="section" aria-labelledby="shortcuts-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Keyboard &amp; accessibility</p>
-            <h2 id="shortcuts-heading">Full keyboard control across player and menu bar</h2>
+            <h2 id="shortcuts-heading">Full keyboard control across Archive, Review, and menu bar</h2>
             <p>
-              Every transport command, timeline marker, zoom step, and menu item is reachable from the keyboard, paired with an offline user manual under <strong>Help → User manual</strong> and automatic updates for packaged releases.
+              Every transport command, timeline marker, zoom step, Archive list row, and menu item is reachable from the keyboard, paired with an offline user manual under <strong>Help → User manual</strong> and automatic updates for packaged releases.
             </p>
           </div>
 
           <div className="table-scroll" role="region" aria-label="Desktop app keyboard shortcuts" tabIndex={0}>
             <table className="spec-table">
-              <caption>Review player and menu bar keyboard shortcuts</caption>
+              <caption>Archive, Review player, and menu bar keyboard shortcuts</caption>
               <thead>
                 <tr>
                   <th scope="col">Keys</th>
@@ -267,13 +339,21 @@ export default function DesktopPage() {
                   <th scope="row"><kbd className="kbd">Alt</kbd>, <kbd className="kbd">Alt+F</kbd>, <kbd className="kbd">Alt+V</kbd>, <kbd className="kbd">Alt+H</kbd></th>
                   <td>Open the menu bar or jump directly to File, View, or Help</td>
                 </tr>
+                <tr>
+                  <th scope="row"><kbd className="kbd">Up</kbd> / <kbd className="kbd">Down</kbd>, <kbd className="kbd">Enter</kbd></th>
+                  <td>Move through recordings in the Archive clip list and open the selected online clip in Review</td>
+                </tr>
+                <tr>
+                  <th scope="row"><kbd className="kbd">Left</kbd> / <kbd className="kbd">Right</kbd>, <kbd className="kbd">Home</kbd> / <kbd className="kbd">End</kbd></th>
+                  <td>Switch between the Archive and Review workspace tabs when the header tab strip is focused</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <FaqSection id="desktop-faq-heading" items={desktopFaq} />
+      <FaqSection id="desktop-faq-heading" items={desktopFaq} alt />
     </>
   );
 }

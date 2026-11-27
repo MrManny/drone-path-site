@@ -41,10 +41,10 @@ export const metadata: Metadata = {
       'Turn the GPS data in your DJI drone videos into synchronized flight-path map overlays, GPX/KML tracks, a searchable footage library, and AI-ready MCP tools. Free and open source.',
     images: [
       {
-        url: '/images/app-main-window.jpg',
-        width: 1440,
-        height: 900,
-        alt: 'Drone Path desktop app displaying a drone recording beside a synchronized 2D flight map',
+        url: '/images/app-archive-workspace.jpg',
+        width: 1600,
+        height: 950,
+        alt: 'Drone Path Desktop Archive workspace displaying watched folders, flight-grouped recordings, and colored flight tracks on a multi-flight satellite map',
       },
     ],
   },
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: 'Drone Path – Free flight path map overlays for DJI drone videos',
     description:
       'Free, open-source desktop app, CLI, and MCP server that turn DJI drone telemetry into map overlay videos and GPX/KML tracks.',
-    images: ['/images/app-main-window.jpg'],
+    images: ['/images/app-archive-workspace.jpg'],
   },
 };
 

@@ -49,7 +49,7 @@ const softwareJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'Drone Path',
-  softwareVersion: '1.1.0',
+  softwareVersion: '1.2.0',
   applicationCategory: 'MultimediaApplication',
   operatingSystem:
     'Windows, Linux (Desktop app); Windows, Linux, macOS (CLI and MCP server)',
@@ -69,6 +69,8 @@ const softwareJsonLd = {
     url: 'https://github.com/MrManny',
   },
   screenshot: [
+    'https://dronepath.dev/images/app-archive-workspace.jpg',
+    'https://dronepath.dev/images/app-archive-point-search.jpg',
     'https://dronepath.dev/images/app-main-window.jpg',
     'https://dronepath.dev/images/example-map-satellite.jpg',
     'https://dronepath.dev/images/example-map-topo-hud.jpg',
@@ -77,12 +79,13 @@ const softwareJsonLd = {
     'Extract GPS telemetry from DJI videos: embedded CAM meta (DVTM) and .SRT subtitle files',
     'Frame-accurate satellite and topographic flight-path map overlay videos for DJI footage',
     'Convert DJI telemetry to GPX, KML, KMZ, GeoJSON, and per-frame JSON tracks',
-    'Searchable local drone footage library: find clips by location, camera direction, and shot type',
+    'Desktop Archive workspace with multi-flight map, point-in-view search, shot filters, and offline drive support',
+    'FFmpeg blurdetect keyframe and clip-wide sharpness scoring cached in SQLite',
     'DaVinci Resolve CSV and Final Cut Pro FCPXML timeline marker export',
-    'Local Model Context Protocol (MCP) server so AI assistants like Claude and Cursor can search your drone footage',
+    'Local Model Context Protocol (MCP) server with 11 tools so AI assistants like Claude and Cursor can search and cull your drone footage',
   ],
   description:
-    'Free, open-source tool that extracts GPS telemetry from DJI drone videos, renders synchronized flight-path map overlay videos, exports GPX/KML/GeoJSON tracks, indexes local footage by location, and connects AI agents over Model Context Protocol.',
+    'Free, open-source tool that extracts GPS telemetry from DJI drone videos, renders synchronized flight-path map overlay videos, exports GPX/KML/GeoJSON tracks, organizes footage in a visual Desktop Archive, scores shot sharpness, and connects AI agents over Model Context Protocol.',
 };
 
 export default function HomePage() {
@@ -103,7 +106,7 @@ export default function HomePage() {
               Free, open-source flight-path map overlays for DJI drone videos.
             </h1>
             <p className="hero-lead">
-              Drone Path extracts the GPS telemetry embedded in your DJI videos (or their .SRT files), tested with DJI Neo 2 footage, and renders a 2D flight-path map overlay at the exact frame rate and frame count of the source recording. Export GPX, KML, or GeoJSON tracks, search your footage by location and camera direction, or connect AI assistants over MCP. MIT-licensed and runs entirely on your computer.
+              Drone Path extracts the GPS telemetry embedded in your DJI videos (or their .SRT files), tested with DJI Neo 2 footage, and renders a 2D flight-path map overlay at the exact frame rate and frame count of the source recording. Browse watched folders in the Desktop Archive, export GPX, KML, or GeoJSON tracks, score shot sharpness, or connect AI assistants over MCP. MIT-licensed and runs entirely on your computer.
             </p>
             <div className="cta-row">
               <a
@@ -132,10 +135,10 @@ export default function HomePage() {
 
           <div className={`media-figure ${styles.heroScreenshot}`}>
             <img
-              src="/images/app-main-window.jpg"
-              alt="Drone Path desktop app displaying a drone recording over an autumn forest beside a synchronized satellite flight map, orange flight trail, and live telemetry readout strip"
-              width={1440}
-              height={900}
+              src="/images/app-archive-workspace.jpg"
+              alt="Drone Path Desktop Archive workspace displaying watched folders, flight-grouped recordings with poster thumbnails, and colored flight tracks on a multi-flight satellite map"
+              width={1600}
+              height={950}
             />
           </div>
 
@@ -143,21 +146,65 @@ export default function HomePage() {
             <h2 id="whats-new-heading">What&apos;s new?</h2>
             <div className={styles.highlights}>
               <div className={styles.featured}>
-                <h3>Automatic shot detection <span className={styles.version}>v1.1.0</span></h3>
+                <h3>Desktop Archive workspace <span className={styles.version}>v1.2.0</span></h3>
                 <p>
-                  Find smooth shots using flight telemetry, pull JPEG keyframes with telemetry snapshots, and export shot markers to DaVinci Resolve or Final Cut Pro.
+                  Add watched folders to browse flights on a multi-flight map, filter by date, shot type, or smoothness, jump to any moment with &ldquo;What filmed here?&rdquo;, and export combined tracks or HTML maps.
                 </p>
               </div>
               <ul className={styles.secondary}>
-                <li><strong>MCP server</strong> <span className={styles.version}>v1.1.0</span> – Let AI assistants search footage, inspect keyframes, and render map overlays.</li>
-                <li><strong>Searchable flight archive</strong> <span className={styles.version}>v1.0.0</span> – Index local clips, find footage by where the drone flew or pointed its camera, and export grouped flights.</li>
+                <li><strong>Sharpness scoring</strong> <span className={styles.version}>v1.2.0</span> – Score keyframes or cache clip-wide luminance sharpness timelines over CLI and MCP to surface your sharpest shots.</li>
+                <li><strong>MCP server</strong> <span className={styles.version}>v1.1.0</span> – Let AI assistants search footage, inspect keyframes, check sharpness, and export markers or map overlays.</li>
               </ul>
             </div>
           </section>
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="telemetry-heading">
+      <section className="section section-alt" aria-labelledby="desktop-archive-heading">
+        <div className="container">
+          <div className="section-header">
+            <p className="section-kicker">Desktop Archive</p>
+            <h2 id="desktop-archive-heading">Browse every flight on one map and jump straight to the shot</h2>
+            <p>
+              Turn local folders or external drives into a visual, searchable flight library—sharing the same local SQLite index as the CLI and MCP server.
+            </p>
+          </div>
+
+          <div className="split-block">
+            <div className="split-copy">
+              <h3>Multi-flight map &amp; &ldquo;What filmed here?&rdquo; search</h3>
+              <p>
+                Add watched folders and explore grouped flights on a fast Canvas map with automatic zoom clustering, lazy poster thumbnails, and offline drive tracking.
+              </p>
+              <ul className="feature-list">
+                <li><strong>Point-in-view search:</strong> Click any spot on the map with <em>What filmed here?</em> to rank clips by camera footprint or track proximity and open Review at that exact second.</li>
+                <li><strong>Shot &amp; telemetry filters:</strong> Narrow flights by date, folder, distance, map viewport, or kinematic shot type and smoothness score.</li>
+                <li><strong>Combined exports:</strong> Save filtered flights as GPX, GeoJSON, KML, KMZ, or offline HTML maps with optional launch-area redaction.</li>
+              </ul>
+              <Link href="/desktop/#archive-heading" className={`card-link ${styles.archiveCta}`}>
+                <span>Explore Desktop Archive</span>
+                <ArrowRightIcon />
+              </Link>
+            </div>
+
+            <figure className="media-figure">
+              <div className="media-frame">
+                <img
+                  src="/images/app-archive-point-search.jpg"
+                  alt="Drone Path Desktop Archive with What filmed here point-in-view search active, showing ranked clip matches in the Clips at this spot popover over the satellite map"
+                  width={1600}
+                  height={950}
+                />
+              </div>
+              <figcaption className="media-caption">
+                Point-in-view search: click any landmark with <strong>What filmed here?</strong> to see every clip that captured or flew past it and jump straight to that second in Review.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="telemetry-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Telemetry extraction</p>
@@ -185,7 +232,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="outputs-heading">
+      <section className="section section-alt" aria-labelledby="outputs-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Map rendering</p>
@@ -227,7 +274,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section section-alt" aria-labelledby="pillars-heading">
+      <section className="section" aria-labelledby="pillars-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Three interfaces, one core</p>
@@ -244,7 +291,7 @@ export default function HomePage() {
               </div>
               <h3>Desktop app</h3>
               <p>
-                An Electron review workspace for Windows and Linux with synchronized split or Picture-in-Picture playback, In–Out loop marking, live map appearance previews, and one-click video or track export.
+                An Electron workspace for Windows and Linux combining the new Archive browser (watched folders, multi-flight map, &ldquo;What filmed here?&rdquo;, and shot filters) with synchronized split or Picture-in-Picture review, In–Out loops, and one-click export.
               </p>
               <Link href="/desktop/" className="card-link">
                 <span>Explore desktop app</span>
@@ -258,7 +305,7 @@ export default function HomePage() {
               </div>
               <h3>CLI &amp; spatial archive</h3>
               <p>
-                A scriptable command-line tool for Windows, Linux, and macOS (Node.js 24+) for batch map rendering, converting DJI telemetry to GPX or KML, fast keyframe extraction, and a searchable footage library that finds clips by location, camera direction, and shot type.
+                A scriptable command-line tool for Windows, Linux, and macOS (Node.js 24+) for batch map rendering, converting DJI telemetry to GPX or KML, keyframe and sharpness timeline analysis, and a searchable footage library.
               </p>
               <Link href="/cli/" className="card-link">
                 <span>Explore CLI &amp; archive</span>
@@ -272,7 +319,7 @@ export default function HomePage() {
               </div>
               <h3>MCP server</h3>
               <p>
-                A local Model Context Protocol (MCP) server for Windows, Linux, and macOS that gives Claude Desktop, Cursor, and other AI assistants 9 tools to search your drone footage, inspect frames, export video editor timeline markers, and render overlays—without uploading video.
+                A local Model Context Protocol (MCP) server for Windows, Linux, and macOS that gives Claude Desktop, Cursor, and other AI assistants 11 tools to search your drone footage, score sharpness, inspect frames, export timeline markers, and render overlays—without uploading video.
               </p>
               <Link href="/mcp/" className="card-link">
                 <span>Explore MCP server</span>
@@ -284,9 +331,9 @@ export default function HomePage() {
           <h3 className="subsection-heading">Example AI workflows</h3>
           <div className="card-grid-2">
             <article className={styles.feature}>
-              <h3>Draft social &amp; YouTube edits</h3>
+              <h3>Identify top shots &amp; draft edits</h3>
               <p>
-                Automatically detect smooth, scenic shots near a location with <span className="inline-code">drone-path</span>, inspect extracted keyframes, and export timeline markers to assemble a rough cut for YouTube or social media.
+                Filter smooth-glide or orbit segments with <span className="inline-code">drone-path</span>, score keyframe and clip-wide sharpness to isolate the crispest takes, inspect extracted frames, and export DaVinci Resolve or Final Cut Pro timeline markers.
               </p>
             </article>
 
@@ -300,7 +347,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="formats-heading">
+      <section className="section section-alt" aria-labelledby="formats-heading">
         <div className="container">
           <div className="section-header">
             <p className="section-kicker">Open standards</p>
@@ -347,7 +394,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <FaqSection id="faq-heading" items={homeFaq} alt />
+      <FaqSection id="faq-heading" items={homeFaq} />
     </>
   );
 }

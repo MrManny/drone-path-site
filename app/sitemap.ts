@@ -14,7 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1.0,
       images: [
-        `${baseUrl}/images/app-main-window.jpg`,
+        `${baseUrl}/images/app-archive-workspace.jpg`,
+        `${baseUrl}/images/app-archive-point-search.jpg`,
         `${baseUrl}/images/example-map-satellite.jpg`,
         `${baseUrl}/images/example-map-topo-hud.jpg`,
       ],
@@ -25,6 +26,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.9,
       images: [
+        `${baseUrl}/images/app-archive-workspace.jpg`,
+        `${baseUrl}/images/app-archive-point-search.jpg`,
         `${baseUrl}/images/app-review-split.jpg`,
         `${baseUrl}/images/app-review-overlay.jpg`,
         `${baseUrl}/images/app-loop-points.jpg`,
@@ -47,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.9,
-      images: [`${baseUrl}/images/app-main-window.jpg`],
+      images: [`${baseUrl}/images/app-archive-workspace.jpg`],
     },
   ];
 }

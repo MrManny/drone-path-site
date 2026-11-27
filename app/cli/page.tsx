@@ -9,10 +9,10 @@ import styles from './page.module.css';
 export const metadata: Metadata = createPageMetadata({
   title: 'Extract GPS from DJI Video – SRT to GPX, KML & GeoJSON CLI',
   description:
-    'Free command-line tool that extracts GPS telemetry from DJI videos and .SRT files, converts it to GPX, KML, or GeoJSON, renders map overlays in batch, and organizes footage by location.',
+    'Free command-line tool that extracts GPS telemetry from DJI videos and .SRT files, converts it to GPX, KML, or GeoJSON, renders map overlays in batch, scores frame sharpness, and organizes footage by location.',
   path: '/cli/',
   ogDescription:
-    'Convert DJI telemetry to GPX/KML/GeoJSON, batch-render flight-path map overlays, extract keyframes, search drone footage by location, and export editor markers.',
+    'Convert DJI telemetry to GPX/KML/GeoJSON, batch-render flight-path map overlays, extract keyframes with sharpness scoring, search drone footage by location, and export editor markers.',
   image: {
     url: '/images/example-map-topo-hud.jpg',
     width: 768,
@@ -52,9 +52,9 @@ const renderExamples: TerminalExample[] = [
 
 const keyframeExample: TerminalExample[] = [
   {
-    command: 'drone-path extract-frame "flight.mp4" --at 2.5,f90 --max-width 640 --json',
-    processing: 'Seeking to 2.5 s and frame 90…',
-    result: 'Extracted 2 JPEGs with telemetry snapshots',
+    command: 'drone-path extract-frame "flight.mp4" --at 2.5,f90 --max-width 640 --sharpness --json',
+    processing: 'Seeking to 2.5 s and frame 90 and scoring luminance sharpness…',
+    result: 'Extracted 2 JPEGs with telemetry snapshots and sharpness scores',
   },
 ];
 
@@ -76,6 +76,12 @@ const archiveExamples: TerminalExample[] = [
     command: 'drone-path archive list --segment-type smooth-glide --min-smoothness 0.8 --json',
     processing: 'Filtering shots by type and smoothness…',
     result: 'Found 5 matching shots',
+  },
+  {
+    note: 'Analyze and query clip-wide sharpness timelines (1 sample/sec cached in SQLite)',
+    command: 'drone-path archive analyze-sharpness "flight.mp4" --json && drone-path archive sharpness "flight.mp4" --start-sec 5 --end-sec 20 --json',
+    processing: 'Computing luminance blurdetect timeline and querying cached range…',
+    result: 'Returned 16 sharpness samples',
   },
   {
     note: 'Find clips that passed near or looked toward a coordinate',
@@ -268,9 +274,9 @@ export default function CliPage() {
             </div>
 
             <div className="card">
-              <h3>Extract targeted keyframes</h3>
+              <h3>Extract targeted keyframes &amp; score sharpness</h3>
               <p>
-                Pull JPEG frames at exact seconds (<span className="inline-code">2.5</span>) or 0-based frame numbers (<span className="inline-code">f90</span>) using fast input seeking without decoding preceding GOPs. With <span className="inline-code">--json</span>, each entry returns dimensions and the nearest telemetry snapshot (<span className="inline-code">lat</span>, <span className="inline-code">lon</span>, <span className="inline-code">altRelM</span>, <span className="inline-code">altAbsM</span>, <span className="inline-code">speedMps</span>, <span className="inline-code">headingDeg</span>, gimbal angles, ISO, and shutter).
+                Pull JPEG frames at exact seconds (<span className="inline-code">2.5</span>) or 0-based frame numbers (<span className="inline-code">f90</span>) using fast input seeking without decoding preceding GOPs. With <span className="inline-code">--json</span>, each entry returns dimensions and the nearest telemetry snapshot (<span className="inline-code">lat</span>, <span className="inline-code">lon</span>, <span className="inline-code">altRelM</span>, <span className="inline-code">altAbsM</span>, <span className="inline-code">speedMps</span>, <span className="inline-code">headingDeg</span>, gimbal angles, ISO, and shutter); add <span className="inline-code">--sharpness</span> to score decoded luminance before JPEG compression.
               </p>
               <TerminalDemo label="Extract keyframes example" examples={keyframeExample} />
             </div>
@@ -294,9 +300,9 @@ export default function CliPage() {
 
           <div className={`card-grid-3 ${styles.archiveFeatures}`}>
             <article>
-              <h3>Kinematic shot segmentation</h3>
+              <h3>Kinematic shots &amp; sharpness</h3>
               <p>
-                Deterministically classifies flight segments into <span className="inline-code">takeoff</span>, <span className="inline-code">landing</span>, <span className="inline-code">hover</span>, <span className="inline-code">smooth-glide</span>, <span className="inline-code">orbit</span>, <span className="inline-code">gimbal-reveal</span>, and <span className="inline-code">reposition</span> with smoothness scores from 0 to 1.
+                Classifies segments into <span className="inline-code">takeoff</span>, <span className="inline-code">landing</span>, <span className="inline-code">hover</span>, <span className="inline-code">smooth-glide</span>, <span className="inline-code">orbit</span>, <span className="inline-code">gimbal-reveal</span>, and <span className="inline-code">reposition</span> with smoothness scores from 0 to 1, and pairs with opt-in <span className="inline-code">archive analyze-sharpness</span> / <span className="inline-code">archive sharpness</span> timelines cached in SQLite for offline culling and NDJSON export.
               </p>
             </article>
 
